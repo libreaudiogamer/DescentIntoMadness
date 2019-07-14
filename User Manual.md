@@ -2,7 +2,6 @@
 
 ## Introduction
 
-
 ### The Story
 
 One dark and stormy night you find yourself walking home alone on the narrow path through the woods. Suddenly, you hear the sound of something rushing through the air and – WHAM – you are hit on the back of the head, hard. You awaken to find yourself strapped to an operating table. You can’t move! Where are you? Why are you there? How do you get out? These are the questions you must answer as you navigate your way through your Descent into Madness.
@@ -13,8 +12,8 @@ If we have done our job correctly, Descent into Madness will play out like an el
 
 ### Requirements
 
-Windows 98, 2000, or XP
-Stereo headphones
+This fork of the original has not set firm system requirements yet. The goal is to make the game playable by as many people as possible. In achieving that goal, I will convert it to use modern technologies (python3). While in development, it will probably work best on linux since that is where it is being developed. The windows script is being moved to a "inoperable" folder for the moment because my modernization will break it. After development is closer to being complete, support for other operating systems will be added and tested. If you have an interest and can help port the game to your favorite operating system, drop me a line.
+Stereo headphones are required for some of the puzzles.
 
 
 ## Administration
