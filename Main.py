@@ -341,6 +341,7 @@ def gameOver():
 def getInput():
   "Waits for keyboard input and returns key that is pressed."
   while 1==1:
+   pygame.time.delay(100)
    for event in pygame.event.get():
       if (event.type == KEYUP): # or (event.type == KEYDOWN)
         return event.key
