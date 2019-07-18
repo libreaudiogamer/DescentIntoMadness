@@ -13,7 +13,6 @@ if mydir:
 from UserDict import UserDict
 import pickle         #for loading and saving data
 import sys            #for sys.exit()
-import pySonic, time  #for fmod
 from threading import Timer
 
 
@@ -24,7 +23,7 @@ roomDict = None
 #******** PYGAME INITIALIZATION ********************************************************************
 import pygame
 from pygame.locals import *
-#Initialize the mixer before the pygame itself because it causes less lag.
+#Initialize the mixer before pygame itself because it causes less lag.
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 pygame.init()
@@ -32,7 +31,7 @@ screen = pygame.display.set_mode((750, 550))
 pygame.display.set_caption('Descent Into Madness')
 pygame.mouse.set_visible(0)
 
-titleScreen = pygame.image.load('images\Descent Into Madness.jpg')
+titleScreen = pygame.image.load('images/Descent Into Madness.jpg')
 tSrect = titleScreen.get_rect()
 
 screen.blit(titleScreen, tSrect)
@@ -351,7 +350,7 @@ def getInput():
         
 def playSound(r,delay=False):
     chan=pygame.mixer.find_channel()
-    ss=pygame.mixer.Sound(r)
+    ss=pygame.mixer.Sound("sounds/"+r)
     if ss == None:
         return
     chan.play(ss)
