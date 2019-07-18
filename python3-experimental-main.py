@@ -359,8 +359,12 @@ def getInput():
                 sys.exit()
                 
 def playSound(r,delay=False):
-    chan=pygame.mixer.find_channel()
-    ss=pygame.mixer.Sound("sounds/"+r)
+    try:
+        chan=pygame.mixer.find_channel()
+        ss=pygame.mixer.Sound("sounds/"+r)
+    except:    
+        print("No sound called "+r+" was found in the game directory.")
+        return
     chan.play(ss)
     while chan.get_busy():
         pygame.event.pump()
