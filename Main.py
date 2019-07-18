@@ -14,7 +14,6 @@ from UserDict import UserDict
 import pickle         #for loading and saving data
 import sys            #for sys.exit()
 import pySonic, time  #for fmod
-import pyTTS          #for text to speech
 from threading import Timer
 
 
@@ -348,47 +347,39 @@ def getInput():
         pygame.quit()
         sys.exit()
         
-def playSound(sound):
-    "Plays a sound"
-    file = "sounds/" + sound
-    #create source
-    src = pySonic.Source()
-    #load audio from disk
-    src.Sound = pySonic.FileSample(file)
-    #src.Frequency = voiceSpeed
-    src.Play()
-    while src.IsPlaying():
-      for event in pygame.event.get():
-        if (event.type == KEYUP): # or (event.type == KEYDOWN)
-          return event.key
-        if (event.type == QUIT):
-          pygame.quit()
-          sys.exit()
+def playSound(r,delay=False):
+    chan=pygame.mixer.find_channel()
+    ss=pygame.mixer.Sound(r)
+    if ss == None:
+        return
+    chan.play(ss)
+    pygame.event.clear()
+    while chan.get_busy():
+        pygame.event.pump()
+        pygame.time.delay(100)
+        if delay == True:
+            continue
+        else:
+            if pygame.event.peek(pygame.KEYDOWN):
+                pygame.event.clear()
+                chan.stop()
+                break
         
-def playSoundLoop(sound):
-    "Plays a sound"
-    file = "sounds/" + sound
+#def playSoundLoop(sound):
+#    "Plays a sound"
+#    file = "sounds/" + sound
     #create source
-    src = pySonic.Source()
-    #load audio from disk
-    src.Sound = pySonic.FileSample(file, pySonic.Constants.FSOUND_LOOP_NORMAL)
-    src.Play()
-    while src.IsPlaying():
-      for event in pygame.event.get():
-        if (event.type == KEYUP): # or (event.type == KEYDOWN)
-          return event.key
-        if (event.type == QUIT):
-          pygame.quit()
-          sys.exit()      
-
-def playTTS(string):
-    "Plays text to speech"
-    tts.Speak(string, pyTTS.tts_async)
-    for event in pygame.event.get():
-      if (event.type == KEYUP):
-        tts.Stop()
-        return(0)
-
+    #src = pySonic.Source()
+#    #load audio from disk
+#    src.Sound = pySonic.FileSample(file, pySonic.Constants.FSOUND_LOOP_NORMAL)
+#    src.Play()
+#    while src.IsPlaying():
+#      for event in pygame.event.get():
+#        if (event.type == KEYUP): # or (event.type == KEYDOWN)
+#          return event.key
+#        if (event.type == QUIT):
+#          pygame.quit()
+#          sys.exit()      
 
 #************** GAME LOOP *******************************************************************************
 def gameLoop():
@@ -1222,13 +1213,11 @@ if __name__ == "__main__":
     song.Volume = 50
     song.Play()
 
-    tts = pyTTS.Create()
-    #tts.SetVoiceByName('MSMary')
-    
+
     menu()    
   finally:        
     pygame.quit()
-    del w
+
 
 
     
