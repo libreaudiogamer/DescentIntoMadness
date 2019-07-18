@@ -1210,6 +1210,7 @@ if __name__ == "__main__":
 
 
     pygame.mixer.music.load("sounds/music1.ogg")
+    pygame.mixer.music.set_volume(.25)
     pygame.mixer.music.play(-1)
 
     menu()    
