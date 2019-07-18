@@ -352,21 +352,16 @@ def getInput():
 def playSound(r,delay=False):
     chan=pygame.mixer.find_channel()
     ss=pygame.mixer.Sound("sounds/"+r)
-    if ss == None:
-        return
     chan.play(ss)
-    pygame.event.clear()
     while chan.get_busy():
         pygame.event.pump()
         pygame.time.delay(100)
         if delay == True:
             continue
-        else:
-            if pygame.event.peek(pygame.KEYDOWN):
-                pygame.event.clear()
+        for event in pygame.event.get():
+            if (event.type == KEYUP): # or (event.type == KEYDOWN)
                 chan.stop()
-                break
-        
+                return event.key
 #def playSoundLoop(sound):
 #    "Plays a sound"
 #    file = "sounds/" + sound
@@ -1216,7 +1211,3 @@ if __name__ == "__main__":
     menu()    
   finally:        
     pygame.quit()
-
-
-
-    
