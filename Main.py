@@ -193,6 +193,9 @@ def menu():
     "Menu"
     while 1 == 1:        
         #print "Welcome to the game, use the spacebar to select, the esc key to cancel, and any other key to scroll"
+        pygame.mixer.music.load("sounds/menumusic.ogg")
+        pygame.mixer.music.set_volume(.80)
+        pygame.mixer.music.play(-1)
         playSound("descentIntoMadness.ogg")
         playSound("menuInstructions.ogg")
         #print "Choose a menu option"
@@ -209,6 +212,9 @@ def menu():
 
 def newGame():
     "New Game"
+    pygame.mixer.music.load("sounds/music1.ogg")
+    pygame.mixer.music.set_volume(.25)
+    pygame.mixer.music.play(-1)
     global currentRoom
     currentRoom = operatingRoom["name"]
 
@@ -219,6 +225,9 @@ def newGame():
     
 def loadGame():
     "Load Game"
+    pygame.mixer.music.load("sounds/music1.ogg")
+    pygame.mixer.music.set_volume(.25)
+    pygame.mixer.music.play(-1)
     global currentRoom, roomDict
     #retrieve currentRoom and roomDict
     #print "Please select a save slot to load"
@@ -1202,12 +1211,6 @@ if __name__ == "__main__":
     SPEED_NORMAL = 45000
     SPEED_FAST = 65000
     voiceSpeed = SPEED_NORMAL
-
-
-    pygame.mixer.music.load("sounds/music1.ogg")
-    pygame.mixer.music.set_volume(.25)
-    pygame.mixer.music.play(-1)
-
     menu()    
   finally:        
     pygame.quit()
