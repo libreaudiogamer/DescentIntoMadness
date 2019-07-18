@@ -24,7 +24,9 @@ roomDict = None
 #******** PYGAME INITIALIZATION ********************************************************************
 import pygame
 from pygame.locals import *
-
+#Initialize the mixer before the pygame itself because it causes less lag.
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 pygame.init()
 screen = pygame.display.set_mode((750, 550))
 pygame.display.set_caption('Descent Into Madness')
@@ -1206,13 +1208,9 @@ if __name__ == "__main__":
     SPEED_FAST = 65000
     voiceSpeed = SPEED_NORMAL
 
-    w = pySonic.World()
-    w.Listener.Position = (0,0,0)
-    song = pySonic.Source()
-    song.Sound = pySonic.FileStream("sounds/music1.ogg", pySonic.Constants.FSOUND_LOOP_NORMAL)
-    song.Volume = 50
-    song.Play()
 
+    pygame.mixer.music.load("sounds/music1.ogg")
+    pygame.mixer.music.play(-1)
 
     menu()    
   finally:        
