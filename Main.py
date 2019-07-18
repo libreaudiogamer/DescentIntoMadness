@@ -5,12 +5,14 @@
 #*******************************************************************************************************************
 # go to the program directory before importing my files
 import os, sys
-
+if sys.version_info[0] < 3:
+    print("Python 2 is not supported. You must run this with Python 3")
+    sys.exit()
 mydir = os.path.dirname(sys.argv[0])
 if mydir:
-  os.chdir(mydir)
-
-from UserDict import UserDict
+    os.chdir(mydir)
+  
+from collections import UserDict
 import pickle         #for loading and saving data
 import sys            #for sys.exit()
 from threading import Timer
@@ -120,58 +122,58 @@ def examine():
         #print "The following items in this room seem suspicious"
         soundInterrupt = playSound("itemsSeemSuspicious.ogg")
         if soundInterrupt:
-          pass
+            pass
         else:
-          for item in roomDict[currentRoom]["items"]:              
-              #print item["name"]
-              soundInterrupt = playSound(item["sName"])
-              if soundInterrupt:
-                break
-              else:
-                pass
+            for item in roomDict[currentRoom]["items"]:              
+                #print item["name"]
+                soundInterrupt = playSound(item["sName"])
+                if soundInterrupt:
+                    break
+                else:
+                    pass
     while 1:
-      #print "What would you like to examine?"
-      playSound("whatToExamine.ogg")
-      examined = select([elem for elem in roomDict[currentRoom]["items"]] + [roomDict[currentRoom]])
-      if examined == "esc":
-          return 0
-      
-      #print examined["sDescription"]
-      playSound(examined["sDescription"])
-
-      #rooms can't be takable, so break if it's a room
-      if examined.__doc__ == "Room":
-          pass
-      elif examined["takable"]==1:
-          #print "Would you like to take this item?"
-          soundInterrupt = playSound("takeItem.ogg")
-          yesOrNo = selectOption(yesNoList)
-          if (yesOrNo == "yes"):
-              roomDict["inventory"]["items"].append(examined)
-              roomDict[currentRoom]["items"].remove(examined)
-              #print "You have taken the " + examined["name"]
-              soundInterrupt = playSound("youHaveTakenThe.ogg")
-              if soundInterrupt:
-                pass
-              else:
-                playSound(examined["sName"])
-
-      playSound("continueExamine.ogg")
-      yesOrNo = selectOption(yesNoList)
-      if yesOrNo == "no":
-        break
-      else:
-        pass
-
+        #print "What would you like to examine?"
+        playSound("whatToExamine.ogg")
+        examined = select([elem for elem in roomDict[currentRoom]["items"]] + [roomDict[currentRoom]])
+        if examined == "esc":
+            return 0
+        
+        #print examined["sDescription"]
+        playSound(examined["sDescription"])
+  
+        #rooms can't be takable, so break if it's a room
+        if examined.__doc__ == "Room":
+            pass
+        elif examined["takable"]==1:
+            #print "Would you like to take this item?"
+            soundInterrupt = playSound("takeItem.ogg")
+            yesOrNo = selectOption(yesNoList)
+            if (yesOrNo == "yes"):
+                roomDict["inventory"]["items"].append(examined)
+                roomDict[currentRoom]["items"].remove(examined)
+                #print "You have taken the " + examined["name"]
+                soundInterrupt = playSound("youHaveTakenThe.ogg")
+                if soundInterrupt:
+                    pass
+                else:
+                    playSound(examined["sName"])
+    
+        playSound("continueExamine.ogg")
+        yesOrNo = selectOption(yesNoList)
+        if yesOrNo == "no":
+            break
+        else:
+            pass
+    
 def move():
     "When player wants to move"
     global currentRoom, roomDict
 
     if len(roomDict[currentRoom]["rooms"]) == 0:
-      #print "You can't move anywhere"
-      playSound("cantMoveAnywhere.ogg")
-      return 0
-    
+        #print "You can't move anywhere"
+        playSound("cantMoveAnywhere.ogg")
+        return 0
+      
     #print "Where do you want to move?"
     playSound("whereToMove.ogg")
     moveTo = select(roomDict[currentRoom]["rooms"])
@@ -181,10 +183,10 @@ def move():
     #print "You are now in the " + currentRoom["name"]
     soundInterrupt = playSound("youAreNowInThe.ogg")
     if soundInterrupt:
-      return 0
+        return 0
     playSound(roomDict[currentRoom]["sName"])
     if soundInterrupt:
-      return 0
+        return 0
     playSound(roomDict[currentRoom]["sDescription"])
     
 
@@ -233,16 +235,16 @@ def loadGame():
     #print "Please select a save slot to load"
     playSound("selectLoad.ogg")
     try:
-		slot = selectOption(saveList)
-		print slot
-		fileHandle = open ( slot )
-		[currentRoom, roomDict] = pickle.load ( fileHandle )
-		fileHandle.close()
+        slot = selectOption(saveList)
+#        print slot
+        fileHandle = open ( slot )
+        [currentRoom, roomDict] = pickle.load ( fileHandle )
+        fileHandle.close()
     except IOError:
-      #print "That file is empty or doesn't exist. You will now be returned to the main menu"
-      playSound("loadError.ogg")
-      return 0
-
+        #print "That file is empty or doesn't exist. You will now be returned to the main menu"
+        playSound("loadError.ogg")
+        return 0
+  
     gameLoop()
 
 def save():
@@ -252,16 +254,16 @@ def save():
     #print "Choose a slot to save your game"
     playSound("saveSlot.ogg")
     try:
-      slot = selectOption(saveList)
-      fileHandle = open ( slot, 'w' )
-      pickle.dump ( [currentRoom, roomDict], fileHandle ) #hopefully this works
-      fileHandle.close()
-      #print "Your game was successfully saved"
-      playSound("saveSuccessful.ogg")
+        slot = selectOption(saveList)
+        fileHandle = open ( slot, 'w' )
+        pickle.dump ( [currentRoom, roomDict], fileHandle ) #hopefully this works
+        fileHandle.close()
+        #print "Your game was successfully saved"
+        playSound("saveSuccessful.ogg")
     except IOError:
-      #print "Error while saving game. Game was not saved."
-      playSound("saveError.ogg")    
-
+        #print "Error while saving game. Game was not saved."
+        playSound("saveError.ogg")    
+  
 def options():
     "Set the game options"
     #set voice speed
@@ -348,19 +350,23 @@ def gameOver():
     #menu()  #may have other functions on the stack, don't know what to do about that
 
 def getInput():
-  "Waits for keyboard input and returns key that is pressed."
-  while 1==1:
-   pygame.time.delay(100)
-   for event in pygame.event.get():
-      if (event.type == KEYUP): # or (event.type == KEYDOWN)
-        return event.key
-      if (event.type == QUIT):
-        pygame.quit()
-        sys.exit()
-        
+    "Waits for keyboard input and returns key that is pressed."
+    while 1==1:
+        pygame.time.delay(100)
+        for event in pygame.event.get():
+            if (event.type == KEYUP): # or (event.type == KEYDOWN)
+                return event.key
+            if (event.type == QUIT):
+                pygame.quit()
+                sys.exit()
+                
 def playSound(r,delay=False):
-    chan=pygame.mixer.find_channel()
-    ss=pygame.mixer.Sound("sounds/"+r)
+    try:
+        chan=pygame.mixer.find_channel()
+        ss=pygame.mixer.Sound("sounds/"+r)
+    except:    
+        print("No sound called "+r+" was found in the game directory.")
+        return
     chan.play(ss)
     while chan.get_busy():
         pygame.event.pump()
@@ -437,49 +443,49 @@ def playerToPiano():
     missCount = 0
 
     while 1 == 1:    
-      #print "Press a key"
-      playSound("pianoPressKey1.ogg")
-      keyPressed1 = selectOption(pianoKeyList)
-      if keyPressed1 == "Cancel":
-        break
-      #print keyPressed1
-      playSound(keyPressed1)
-      
-      #print "Press a 2nd key"
-      playSound("pianoPressKey2.ogg")
-      keyPressed2 = selectOption(pianoKeyList)
-      if keyPressed2 == "Cancel":
-        break
-      #print keyPressed2
-      playSound(keyPressed2)
-
-      #print "Press a 3rd key"
-      playSound("pianoPressKey3.ogg")
-      keyPressed3 = selectOption(pianoKeyList)
-      if keyPressed3 == "Cancel":
-        break
-      #print keyPressed3
-      playSound(keyPressed3)
-
-      if(keyPressed1 == "pianoC.ogg" and keyPressed2 == "pianoE.ogg" and keyPressed3 == "pianoG.ogg"):
-        #print "Ding!"
-        playSound("chime.ogg")
-        #print "You hear a loud rumble from the hallway that sounds like a wall moving"
-        playSound("pianoSolve.ogg")
-        roomDict["basementHallway"]["rooms"].insert(0, elevator)
-        #basementHallway["rooms"].insert(0, elevator) #added elevator
-        break
-      else:
-        missCount = missCount + 1
-        #print "Err!"
-        playSound("buzzer.ogg")
-        if(missCount == 3):
-          #print "You have failed too many times. A trap door opens underneath you, revealing a pit of spikes. You fall to your death."
-          playSound("pianoFail.ogg")
-          gameOver()
+            #print "Press a key"
+        playSound("pianoPressKey1.ogg")
+        keyPressed1 = selectOption(pianoKeyList)
+        if keyPressed1 == "Cancel":
+            break
+        #print keyPressed1
+        playSound(keyPressed1)
+        
+        #print "Press a 2nd key"
+        playSound("pianoPressKey2.ogg")
+        keyPressed2 = selectOption(pianoKeyList)
+        if keyPressed2 == "Cancel":
+            break
+        #print keyPressed2
+        playSound(keyPressed2)
+  
+        #print "Press a 3rd key"
+        playSound("pianoPressKey3.ogg")
+        keyPressed3 = selectOption(pianoKeyList)
+        if keyPressed3 == "Cancel":
+            break
+        #print keyPressed3
+        playSound(keyPressed3)
+  
+        if(keyPressed1 == "pianoC.ogg" and keyPressed2 == "pianoE.ogg" and keyPressed3 == "pianoG.ogg"):
+            #print "Ding!"
+            playSound("chime.ogg")
+            #print "You hear a loud rumble from the hallway that sounds like a wall moving"
+            playSound("pianoSolve.ogg")
+            roomDict["basementHallway"]["rooms"].insert(0, elevator)
+            #basementHallway["rooms"].insert(0, elevator) #added elevator
+            break
         else:
-          playSound("pianoTryAgain.ogg")
-
+            missCount = missCount + 1
+            #print "Err!"
+            playSound("buzzer.ogg")
+            if(missCount == 3):
+            #print "You have failed too many times. A trap door opens underneath you, revealing a pit of spikes. You fall to your death."
+                playSound("pianoFail.ogg")
+                gameOver()
+            else:
+                playSound("pianoTryAgain.ogg")
+      
 def operatingRoomKeyToOperatingRoomDoor():
     #print "You unlocked the door to the hallway. You can now move to the hallway."
     playSound("unlockOperatingRoom.ogg")
@@ -545,24 +551,24 @@ def playerToSafe():
     numberChosen3 = selectOption(numberList)
 
     if(numberChosen1 == "2" and numberChosen2 == "1" and numberChosen3 == "6"):
-      #print "Ding!"
-      playSound("chime.ogg")
-      #print "The safe opens. Inside you find a recording, a key, and a pass card"
-      playSound("safeOpen1.ogg")
-      roomDict["study"]["items"].remove(safe)
-      roomDict["study"]["items"].insert(0, safeRecording)
-      roomDict["study"]["items"].insert(0, cellKey)
-      roomDict["study"]["items"].insert(0, passCard)
-      #print "phone ring"
-      playSound("phoneRing.ogg")
-      #print "Strange, the phone suddenly rings. You pick it up"
-      playSound("safeOpen2.ogg")
-      #print "Professor talks"
-      playSound("safeOpen3.ogg")
+        #print "Ding!"
+        playSound("chime.ogg")
+        #print "The safe opens. Inside you find a recording, a key, and a pass card"
+        playSound("safeOpen1.ogg")
+        roomDict["study"]["items"].remove(safe)
+        roomDict["study"]["items"].insert(0, safeRecording)
+        roomDict["study"]["items"].insert(0, cellKey)
+        roomDict["study"]["items"].insert(0, passCard)
+        #print "phone ring"
+        playSound("phoneRing.ogg")
+        #print "Strange, the phone suddenly rings. You pick it up"
+        playSound("safeOpen2.ogg")
+        #print "Professor talks"
+        playSound("safeOpen3.ogg")
     else:
-      #print "Err!"
-      playSound("buzzer.ogg")
-
+        #print "Err!"
+        playSound("buzzer.ogg")
+  
 def cellKeyToBathroomHallwayDoor():
     "Opens the cell"
     roomDict["bathroomHallway"]["items"].remove(bathroomHallwayDoor)
@@ -617,8 +623,8 @@ def playLeftSound():
     leftSound.Velocity = (0, 0, 0)
     leftSound.Play()
     while leftSound.IsPlaying():
-      time.sleep(0.5)
-
+        time.sleep(0.5)
+  
 def playRightSound():
     "For the passCardToSittingRoomDoor puzzle. Plays a sound to the right"
     rightSound = pySonic.Source()
@@ -627,8 +633,8 @@ def playRightSound():
     rightSound.Velocity = (0, 0, 0)
     rightSound.Play()
     while rightSound.IsPlaying():
-      time.sleep(0.5)
-    
+        time.sleep(0.5)
+      
 def passCardToSittingRoomDoor():
     "Puzzle to open Eleanor's room"
     #print "There are 2 speakers in front of you, one on the left, one on the right. Below each speaker is a button. When you insert the pass key, sounds start playing from the left and right speakers.
@@ -646,17 +652,17 @@ def passCardToSittingRoomDoor():
         return 0
     buttonSequence = buttonPressed
     for i in range(3):
-      #print "Press a button"
-      playSound("passCardToSittingRoomDoor2.ogg")
-      buttonPressed = selectOption(buttonList)
-      if buttonPressed == "cancel":
-        return 0
-      buttonSequence += buttonPressed
+        #print "Press a button"
+        playSound("passCardToSittingRoomDoor2.ogg")
+        buttonPressed = selectOption(buttonList)
+        if buttonPressed == "cancel":
+            return 0
+        buttonSequence += buttonPressed
     if(buttonSequence != "leftButtonrightButtonleftButtonleftButton"):
-      playSound("buzzer.ogg")
-      #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
-      playSound("passCardToSittingRoomDoor3.ogg")
-      gameOver()
+        playSound("buzzer.ogg")
+        #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
+        playSound("passCardToSittingRoomDoor3.ogg")
+        gameOver()
     playSound("chime.ogg")
 
     #second sequence is R, R, R, L, R, L
@@ -673,18 +679,18 @@ def passCardToSittingRoomDoor():
         return 0
     buttonSequence = buttonPressed
     for i in range(5):
-      #print "Press a button"
-      playSound("passCardToSittingRoomDoor2.ogg")
-      buttonPressed = selectOption(buttonList)
-      if buttonPressed == "cancel":
-        return 0
-      buttonSequence += buttonPressed
+        #print "Press a button"
+        playSound("passCardToSittingRoomDoor2.ogg")
+        buttonPressed = selectOption(buttonList)
+        if buttonPressed == "cancel":
+            return 0
+        buttonSequence += buttonPressed
     if(buttonSequence != "rightButtonrightButtonrightButtonleftButtonrightButtonleftButton"):
-      playSound("buzzer.ogg")
-      #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
-      playSound("passCardToSittingRoomDoor3.ogg")
-      gameOver()
-
+        playSound("buzzer.ogg")
+        #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
+        playSound("passCardToSittingRoomDoor3.ogg")
+        gameOver()
+  
     playSound("chime.ogg")
     #print "The door slides open. You can now move into the dark room ahead"
     playSound("passCardToSittingRoomDoor4.ogg")
@@ -738,64 +744,64 @@ def passCardToMazeDoor():
     playSound("passCardToMazeDoor1.ogg")
 
     while 1:
-      #make the move list
-      mazeMoveList = []
-      #north
-      if (positionY + 1 <= 4) and (mazeMatrix[positionX][positionY+1] != 0):
-          mazeMoveList.append(["north.ogg", "north"])
-      #west
-      if (positionX - 1 >= 0) and (mazeMatrix[positionX-1][positionY] != 0):
-          mazeMoveList.append(["west.ogg", "west"])
-      #south
-      if (positionY - 1 >= 0) and (mazeMatrix[positionX][positionY-1] != 0):
-          mazeMoveList.append(["south.ogg", "south"])
-      #east
-      if (positionX + 1 <= 4) and (mazeMatrix[positionX+1][positionY] != 0):
-          mazeMoveList.append(["east.ogg", "east"])		
+        #make the move list
+        mazeMoveList = []
+        #north
+        if (positionY + 1 <= 4) and (mazeMatrix[positionX][positionY+1] != 0):
+            mazeMoveList.append(["north.ogg", "north"])
+        #west
+        if (positionX - 1 >= 0) and (mazeMatrix[positionX-1][positionY] != 0):
+            mazeMoveList.append(["west.ogg", "west"])
+        #south
+        if (positionY - 1 >= 0) and (mazeMatrix[positionX][positionY-1] != 0):
+            mazeMoveList.append(["south.ogg", "south"])
+        #east
+        if (positionX + 1 <= 4) and (mazeMatrix[positionX+1][positionY] != 0):
+            mazeMoveList.append(["east.ogg", "east"])             
+        
+        #move
+        #print "The following paths are open:"
+        playSound("passCardToMazeDoor2.ogg")
+        for elem in mazeMoveList:
+            playSound(elem[0])
+        #print "Select a direction to move."
+        playSound("passCardToMazeDoor3.ogg")
+        mazeMove = selectOption(mazeMoveList)
+        
+        #update position
+        if mazeMove == "north":
+            positionY += 1
+        elif mazeMove == "south":
+            positionY -= 1
+        elif mazeMove == "east":
+            positionX += 1
+        elif mazeMove == "west":
+            positionX -= 1
+        exitSound.Position = (0-positionX, 4-positionY, 0)
+        exitSound.Play()
       
-      #move
-      #print "The following paths are open:"
-      playSound("passCardToMazeDoor2.ogg")
-      for elem in mazeMoveList:
-          playSound(elem[0])
-      #print "Select a direction to move."
-      playSound("passCardToMazeDoor3.ogg")
-      mazeMove = selectOption(mazeMoveList)
-      
-      #update position
-      if mazeMove == "north":
-          positionY += 1
-      elif mazeMove == "south":
-          positionY -= 1
-      elif mazeMove == "east":
-          positionX += 1
-      elif mazeMove == "west":
-          positionX -= 1
-      exitSound.Position = (0-positionX, 4-positionY, 0)
-      exitSound.Play()
-    
-          
-      if(mazeMatrix[positionX][positionY] == 2):
-          #print "ROAR! It's a monster."
-          playSound("passCardToMazeDoor4.ogg")
-          playSound("whatItemWillYouUse.ogg")
-          itemUsed = select([elem for elem in roomDict["inventory"]["items"]])
-          if itemUsed["name"] == "gun":
-              #print "The monster lunges at you, but you side step and fire your gun! BANG! And the monster falls dead"
-              playSound("passCardToMazeDoor5.ogg")
-          else:
-              #print "The monster is not phased, and lunges straight for your neck, ripping out your throat"
-              playSound("passCardToMazeDoor6.ogg")
-              song.Play()
-              gameOver()
-      elif(mazeMatrix[positionX][positionY]==3):
-          #print "You've reached the end of the maze. After rummaging through stacks of chemicals, you find the ingredients that Eleanor told you about. You make your way back to the entrance of the maze, and are now back in the basement"
-          playSound("passCardToMazeDoor7.ogg")
-          roomDict["inventory"]["items"].append(ingredients)
-          exitSound.Stop()
-          song.Play()
-          return 0
-
+            
+        if(mazeMatrix[positionX][positionY] == 2):
+            #print "ROAR! It's a monster."
+            playSound("passCardToMazeDoor4.ogg")
+            playSound("whatItemWillYouUse.ogg")
+            itemUsed = select([elem for elem in roomDict["inventory"]["items"]])
+            if itemUsed["name"] == "gun":
+                #print "The monster lunges at you, but you side step and fire your gun! BANG! And the monster falls dead"
+                playSound("passCardToMazeDoor5.ogg")
+            else:
+                #print "The monster is not phased, and lunges straight for your neck, ripping out your throat"
+                playSound("passCardToMazeDoor6.ogg")
+                song.Play()
+                gameOver()
+        elif(mazeMatrix[positionX][positionY]==3):
+            #print "You've reached the end of the maze. After rummaging through stacks of chemicals, you find the ingredients that Eleanor told you about. You make your way back to the entrance of the maze, and are now back in the basement"
+            playSound("passCardToMazeDoor7.ogg")
+            roomDict["inventory"]["items"].append(ingredients)
+            exitSound.Stop()
+            song.Play()
+            return 0
+  
 def playerToComputer():
     "Attempt to logon to computer. Need passkey from notebook, which is 9 3 1"
     numberList = [ ["1.ogg", "1"], ["2.ogg", "2"], ["3.ogg", "3"], ["4.ogg", "4"], ["5.ogg", "5"], ["6.ogg", "6"], ["7.ogg", "7"], ["8.ogg", "8"], ["9.ogg", "9"], ["0.ogg", "0"] ]
@@ -815,52 +821,52 @@ def playerToComputer():
     numberChosen3 = selectOption(numberList)
 
     if(numberChosen1 == "9" and numberChosen2 == "3" and numberChosen3 == "1"):
-      #print "Ding!"
-      playSound("chime.ogg")
-      #print "The basement lab is now unlocked. You can access the lab by going down the elevator in this room"
-      
-      playTTS("The Elevator has been activated")
-      time.sleep(2)
+        #print "Ding!"
+        playSound("chime.ogg")
+        #print "The basement lab is now unlocked. You can access the lab by going down the elevator in this room"
         
-      roomDict["basementHallway"]["rooms"].insert(0, lab)
-      roomDict["basementHallway"]["items"].remove(labDoor)
-      roomDict["study"]["rooms"].insert(0, elevator)
+        playTTS("The Elevator has been activated")
+        time.sleep(2)
+          
+        roomDict["basementHallway"]["rooms"].insert(0, lab)
+        roomDict["basementHallway"]["items"].remove(labDoor)
+        roomDict["study"]["rooms"].insert(0, elevator)
 #!!! this might not work
-      eleanor["sDescription"]="eleanorDesc2.ogg"
-      #roomDict["eleanorsRoom"]["items"].remove(eleanor)
-      roomDict["lab"]["items"].insert(0, eleanor)
+        eleanor["sDescription"]="eleanorDesc2.ogg"
+        #roomDict["eleanorsRoom"]["items"].remove(eleanor)
+        roomDict["lab"]["items"].insert(0, eleanor)
     else:
-      #print "Err!"
-      playSound("buzzer.ogg")
-
+        #print "Err!"
+        playSound("buzzer.ogg")
+  
 def ingredientsToEleanor():
-	"Give ingredients to Eleanor"
-	#print "Eleanor conversation"
-	playSound("ingredientsToEleanor.ogg")
-	playSound("ingredientsToEleanor2.ogg")
-	roomDict["inventory"]["items"].append(garageKey)
-	roomDict["inventory"]["items"].remove(ingredients)
-	eleanor["sDescription"]="eleanorDesc3.ogg"
-	
+    "Give ingredients to Eleanor"
+    #print "Eleanor conversation"
+    playSound("ingredientsToEleanor.ogg")
+    playSound("ingredientsToEleanor2.ogg")
+    roomDict["inventory"]["items"].append(garageKey)
+    roomDict["inventory"]["items"].remove(ingredients)
+    eleanor["sDescription"]="eleanorDesc3.ogg"
+    
 def garageKeyToGarageDoor():
-	"Doesn't work"
-	#print "You try the key to the door, but the lock seems to be rusted shut. Maybe you can just shoot it out"
-	playSound("garageKeyToGarageDoor.ogg")
-	
+    "Doesn't work"
+    #print "You try the key to the door, but the lock seems to be rusted shut. Maybe you can just shoot it out"
+    playSound("garageKeyToGarageDoor.ogg")
+    
 def gunToGarageDoor():
-	"Shoot open lock"
-	#print "You shoot the lock on the door and it shatters. You can now move to the garage"
-	playSound("gunToGarageDoor.ogg")
-	roomDict["inventory"]["items"].remove(garageKey)
-	roomDict["kitchen"]["items"].remove(garageDoor)
-	roomDict["kitchen"]["rooms"].insert(0, garage)
-	
+    "Shoot open lock"
+    #print "You shoot the lock on the door and it shatters. You can now move to the garage"
+    playSound("gunToGarageDoor.ogg")
+    roomDict["inventory"]["items"].remove(garageKey)
+    roomDict["kitchen"]["items"].remove(garageDoor)
+    roomDict["kitchen"]["rooms"].insert(0, garage)
+    
 def dieInTrappedHallway():
-	"For use in trappedHallwayDoorKeyToTrappedHallwayDoor()"
-	#print "You fail to act fast enough, and a large blade cuts in you half"
-	playSound("dieInTrappedHallway.ogg")
-	gameOver()
-	
+    "For use in trappedHallwayDoorKeyToTrappedHallwayDoor()"
+    #print "You fail to act fast enough, and a large blade cuts in you half"
+    playSound("dieInTrappedHallway.ogg")
+    gameOver()
+    
 def trappedHallwayReact(direction):
     if direction == "up":
         soundFile = "jump.ogg"
@@ -878,22 +884,21 @@ def trappedHallwayReact(direction):
         soundFile = "shoot.ogg"
         expectedInput = K_SPACE
     else:
-        print "Error in trappedHallwayReact()"
-
+         print("Error in trappedHallwayReact()")
     t = Timer(2.0, dieInTrappedHallway)
     playSound(soundFile)
     t.start() # after 2 seconds, player dies if he hasn't inputted correct key
     while 1:
-      keyboardInput = getInput()
-      if keyboardInput == expectedInput:
-          t.cancel()
-          return 0
-      else:
-          #print "You act as fast you can, but you did the wrong thing and a blade cuts you in half"
-          t.cancel()
-          playSound("dieInTrappedHallway2.ogg")
-          gameOver()
-
+        keyboardInput = getInput()
+        if keyboardInput == expectedInput:
+            t.cancel()
+            return 0
+        else:
+            #print "You act as fast you can, but you did the wrong thing and a blade cuts you in half"
+            t.cancel()
+            playSound("dieInTrappedHallway2.ogg")
+            gameOver()
+  
 def trappedHallwayDoorKeyToTrappedHallwayDoor():
     "Use key on door, triggers cut scene"
     roomDict["inventory"]["items"].remove(trappedHallwayDoorKey)
@@ -927,290 +932,290 @@ def trappedHallwayDoorKeyToTrappedHallwayDoor():
     playSound(roomDict[currentRoom]["sDescription"])
 
 def passCardToBarnDoor():
-	"Unlock barn"
-	#print "You have unlocked the barn door. You can now move into the barn"
-	playSound("passCardToBarnDoor.ogg")
-	roomDict["outside"]["rooms"].insert(0, barn)
-	
+    "Unlock barn"
+    #print "You have unlocked the barn door. You can now move into the barn"
+    playSound("passCardToBarnDoor.ogg")
+    roomDict["outside"]["rooms"].insert(0, barn)
+    
 def playerToBarnSwitch():
-	"Unlocks cages, monsters kill you"
-	#print "You hit the switch, and all of the cages open. You've freed all of the monsters, and they show their thanks by eating you alive."
-	playSound("playerToBarnSwitch.ogg")
-	gameOver()
-	
+    "Unlocks cages, monsters kill you"
+    #print "You hit the switch, and all of the cages open. You've freed all of the monsters, and they show their thanks by eating you alive."
+    playSound("playerToBarnSwitch.ogg")
+    gameOver()
+    
 def knifeToEleanor2():
-	"Cut her bindings"
-	#print "conversation"
-	playSound("knifeToEleanor2.ogg")
-	playSound("eleanor050_barn.ogg")
-	
+    "Cut her bindings"
+    #print "conversation"
+    playSound("knifeToEleanor2.ogg")
+    playSound("eleanor050_barn.ogg")
+    
 def dieInBarn():
-	"Killed by doctor"
-	#print "You try to pull out your gun, but you aren't fast enough. The doctor bounds up the stairs with surprising speed, steals your gun right out of your hand and shoots you with it"
-	playSound("dieInBarn.ogg")
-	gameOver()
-	
+    "Killed by doctor"
+    #print "You try to pull out your gun, but you aren't fast enough. The doctor bounds up the stairs with surprising speed, steals your gun right out of your hand and shoots you with it"
+    playSound("dieInBarn.ogg")
+    gameOver()
+    
 def gasolineToEleanor2():
-	"Give her the gas"
-	#print "conversation"
-	playSound("doc140_barn.ogg")
-	playSound("friend080_shoot_the_doctor.ogg")
-	
-	t = Timer(2.0, dieInBarn) 
-	t.start() # after 2 seconds, player dies if he hasn't inputted correct key 
-	while 1:
-		keyboardInput = getInput()
-		if keyboardInput == K_SPACE:
-			t.cancel()
-			break
-		else:
-			pass
+    "Give her the gas"
+    #print "conversation"
+    playSound("doc140_barn.ogg")
+    playSound("friend080_shoot_the_doctor.ogg")
+    
+    t = Timer(2.0, dieInBarn) 
+    t.start() # after 2 seconds, player dies if he hasn't inputted correct key 
+    while 1:
+        keyboardInput = getInput()
+        if keyboardInput == K_SPACE:
+            t.cancel()
+            break
+        else:
+            pass
 
-	playSound("doc150_barn_hit.ogg")
-	
-	#print "ending"
-	playSound("narrator_before_final_scene.ogg")
-	playSound("final_scene.ogg")
-	
-	
+    playSound("doc150_barn_hit.ogg")
+    
+    #print "ending"
+    playSound("narrator_before_final_scene.ogg")
+    playSound("final_scene.ogg")
+    
+    
 
 #************** MAIN METHOD *****************************************************************************
 if __name__ == "__main__":
-  try:
+    try:
     #player, journal, and inventory are part of the game engine, so separate them out
-    player = Item()
-    journal = Item()
-    player.construct("player", "self.ogg", "selfDesc.ogg", 0)
-    journal.construct("journal", "journal.ogg", "journalDesc.ogg", 0)
-    #inventory isn't really a room, but it's easier to treat it as one. All of the player's inventory is in the "items" list of the inventory room
-    inventory = Room()
-    inventory.construct("inventory", "inventory.ogg", "inventory.ogg", [], [player])
+        player = Item()
+        journal = Item()
+        player.construct("player", "self.ogg", "selfDesc.ogg", 0)
+        journal.construct("journal", "journal.ogg", "journalDesc.ogg", 0)
+        #inventory isn't really a room, but it's easier to treat it as one. All of the player's inventory is in the "items" list of the inventory room
+        inventory = Room()
+        inventory.construct("inventory", "inventory.ogg", "inventory.ogg", [], [player])
+        
+        #initialize the rooms and items
+        operatingRoom = Room()
+        freezer = Room()
+        basementHallway = Room()
+        pianoRoom = Room()
+        elevator = Room()
+        study = Room()
+        upperHallway = Room()
+        bedroom = Room()
+        bathroom = Room()
+        closet = Room()
+        bathroomHallway = Room()
+        balcony = Room()
+        westHallway = Room()
+        lobby = Room()
+        library = Room()
+        masterBedroom = Room()
+        masterBathroom = Room()
+        masterElevator = Room()
+        eleanorsRoom = Room()
+        sittingRoom = Room()
+        basement = Room()
+        kitchen = Room()
+        lab = Room()
+        garage = Room()
+        trappedHallway = Room()
+        outside = Room()
+        barn = Room()
+        barnLoft = Room()
+        
+        operatingTable = Item()
+        scalpel = Item()
+        operatingRoomRecording = Item()
+        operatingRoomDoor = Item()
+        operatingRoomKey = Item()
+        freezerBodies = Item()
+        piano = Item()
+        painting = Item()
+        deskKey = Item()
+        studyRecording = Item()
+        computer = Item()
+        phone = Item()
+        safe = Item()
+        desk = Item()
+        bedroomRecording = Item()
+        bed = Item()
+        mirror = Item()
+        bathtub = Item()
+        shelf = Item()
+        box = Item()
+        broom = Item()
+        hammer = Item()
+        star = Item()
+        starHole = Item()
+        bathroomHallwayDoor = Item()
+        safeRecording = Item()
+        cellKey = Item()
+        passCard = Item()
+        upperHallwayDoor = Item()
+        notebook = Item()
+        mainEntrance = Item()
+        masterBedroomDeskKey = Item()
+        masterBedroomDesk = Item()
+        masterBedroomBed = Item()
+        libraryRecording = Item()
+        masterBedroomRecording = Item()
+        masterBathroomStarHole = Item()
+        masterBathroomMirror = Item()
+        sittingRoomDoor = Item()
+        knife = Item()
+        trappedHallwayDoorKey = Item()
+        eleanor = Item()
+        gun = Item()
+        labDoor = Item()
+        ingredients = Item()
+        mazeDoor = Item()
+        garageDoor = Item()
+        garageKey = Item()
+        gasoline = Item()
+        trappedHallwayDoor = Item()
+        barnDoor = Item()
+        barnSwitch = Item()
+        eleanor2 = Item()
     
-    #initialize the rooms and items
-    operatingRoom = Room()
-    freezer = Room()
-    basementHallway = Room()
-    pianoRoom = Room()
-    elevator = Room()
-    study = Room()
-    upperHallway = Room()
-    bedroom = Room()
-    bathroom = Room()
-    closet = Room()
-    bathroomHallway = Room()
-    balcony = Room()
-    westHallway = Room()
-    lobby = Room()
-    library = Room()
-    masterBedroom = Room()
-    masterBathroom = Room()
-    masterElevator = Room()
-    eleanorsRoom = Room()
-    sittingRoom = Room()
-    basement = Room()
-    kitchen = Room()
-    lab = Room()
-    garage = Room()
-    trappedHallway = Room()
-    outside = Room()
-    barn = Room()
-    barnLoft = Room()
+          
+        #construct the rooms and items
+        operatingRoom.construct("operatingRoom", "operatingRoom.ogg", "operatingRoomDesc.ogg", [], [operatingTable, scalpel])   #freezer, operatingRoomDoor accessible after scalpelToOperatingTable, locked door to basementHallway
+        freezer.construct("freezer", "freezer.ogg", "freezerDesc.ogg", [operatingRoom], [freezerBodies, operatingRoomKey])
+        basementHallway.construct("basementHallway", "basementHallway.ogg", "basementHallwayDesc.ogg", [operatingRoom, pianoRoom], [journal, labDoor]) #hidden door to elevator
+        pianoRoom.construct("pianoRoom", "pianoRoom.ogg", "pianoRoomDesc.ogg", [basementHallway], [painting, piano])
+        elevator.construct("elevator", "elevator.ogg", "elevatorDesc.ogg", [basementHallway, study], [])
+        study.construct("study", "study.ogg", "studyDesc.ogg", [upperHallway], [deskKey, studyRecording, computer, phone, safe])
+        upperHallway.construct("upperHallway", "upperHallway.ogg", "upperHallwayDesc.ogg", [study, bedroom, closet], [upperHallwayDoor, journal])
+        bedroom.construct("bedroom", "bedroom.ogg", "bedroomDesc.ogg", [upperHallway, bathroom], [desk, bed])
+        bathroom.construct("bathroom", "bathroom.ogg", "bathroomDesc.ogg", [bedroom], [journal, mirror, bathtub, shelf])
+        closet.construct("closet", "closet.ogg", "closetDesc.ogg", [upperHallway], [broom, hammer])
+        bathroomHallway.construct("bathroomHallway", "bathroomHallway.ogg", "bathroomHallwayDesc.ogg", [bathroom], [bathroomHallwayDoor])
+        balcony.construct("balcony", "balcony.ogg", "balconyDesc.ogg", [upperHallway, westHallway, lobby], [])
+        westHallway.construct("westHallway", "westHallway.ogg", "westHallwayDesc.ogg", [balcony, masterBedroom, library], [journal])
+        lobby.construct("lobby", "lobby.ogg", "lobbyDesc.ogg", [balcony, kitchen], [journal, mainEntrance, trappedHallwayDoor])
+        library.construct("library", "library.ogg", "libraryDesc.ogg", [westHallway], [notebook, masterBedroomDeskKey, libraryRecording])
+        masterBedroom.construct("masterBedroom", "masterBedroom.ogg", "masterBedroomDesc.ogg", [westHallway, masterBathroom], [masterBedroomDesk, masterBedroomBed])
+        masterBathroom.construct("masterBathroom", "masterBathroom.ogg", "masterBathroomDesc.ogg", [masterBedroom], [masterBathroomMirror, masterBathroomStarHole])
+        masterElevator.construct("masterElevator", "masterElevator.ogg", "masterElevatorDesc.ogg", [masterBathroom, sittingRoom, basement], [])
+        eleanorsRoom.construct("eleanorsRoom", "eleanorsRoom.ogg", "eleanorsRoomDesc.ogg", [sittingRoom], [eleanor])
+        sittingRoom.construct("sittingRoom", "sittingRoom.ogg", "sittingRoomDesc.ogg", [masterElevator], [journal, sittingRoomDoor])
+        basement.construct("basement", "basement.ogg", "basementDesc.ogg", [masterElevator], [journal, mazeDoor])
+        kitchen.construct("kitchen", "kitchen.ogg", "kitchenDesc.ogg", [lobby], [knife, garageDoor])
+        lab.construct("lab", "lab.ogg", "labDesc.ogg", [basementHallway], [])
+        garage.construct("garage", "garage.ogg", "garageDesc.ogg", [kitchen], [journal, gasoline, trappedHallwayDoorKey])
+        trappedHallway.construct("trappedHallway", "trappedHallway.ogg", "trappedHallwayDesc.ogg", [lobby, outside], []) #Desc, traps have been deactivated
+        outside.construct("outside", "outside.ogg", "outsideDesc.ogg", [trappedHallway], [journal, barnDoor])
+        barn.construct("barn", "barn.ogg", "barnDesc.ogg", [outside, barnLoft], [barnSwitch])
+        barnLoft.construct("barnLoft", "barnLoft.ogg", "barnLoftDesc.ogg", [barn], [eleanor2])
+       
+        operatingTable.construct("operatingTable", "operatingTable.ogg", "operatingTableDesc.ogg", 0)
+        scalpel.construct("scalpel", "scalpel.ogg", "scalpelDesc.ogg", 1)
+        operatingRoomRecording.construct("operatingRoomRecording", "recording.ogg", "operatingRoomRecordingDesc.ogg", 0)
+        operatingRoomDoor.construct("operatingRoomDoor", "operatingRoomDoor.ogg", "operatingRoomDoorDesc.ogg", 0)
+        operatingRoomKey.construct("operatingRoomKey", "operatingRoomKey.ogg", "operatingRoomKeyDesc.ogg", 1)
+        freezerBodies.construct("freezerBodies", "freezerBodies.ogg", "freezerBodiesDesc.ogg", 0)
+        piano.construct("piano", "piano.ogg", "pianoDesc.ogg", 0)
+        painting.construct("painting", "painting.ogg", "paintingDesc.ogg", 0)
+        deskKey.construct("deskKey", "deskKey.ogg", "deskKeyDesc.ogg", 1)
+        studyRecording.construct("studyRecording", "recording.ogg", "studyRecordingDesc.ogg", 0)
+        computer.construct("computer", "computer.ogg", "computerDesc.ogg", 0)
+        phone.construct("phone", "phone.ogg", "phoneDesc.ogg", 0)
+        safe.construct("safe", "safe.ogg", "safeDesc.ogg", 0)
+        desk.construct("desk", "desk.ogg", "deskDesc.ogg", 0)
+        bedroomRecording.construct("bedroomRecording", "recording.ogg", "bedroomRecordingDesc.ogg", 0)
+        bed.construct("bed", "bed.ogg", "bedDesc.ogg", 0)
+        mirror.construct("mirror", "mirror.ogg", "mirrorDesc.ogg", 0)
+        bathtub.construct("bathtub", "bathtub.ogg", "bathtubDesc.ogg", 0)
+        shelf.construct("shelf", "shelf.ogg", "shelfDesc.ogg", 0)
+        box.construct("box", "box.ogg", "boxDesc.ogg", 0)
+        broom.construct("broom", "broom.ogg", "broomDesc.ogg", 1)
+        hammer.construct("hammer", "hammer.ogg", "hammerDesc.ogg", 1)
+        star.construct("star", "star.ogg", "starDesc.ogg", 1)
+        starHole.construct("starHole", "starHole.ogg", "starHoleDesc.ogg", 0)
+        bathroomHallwayDoor.construct("bathroomHallwayDoor", "bathroomHallwayDoor.ogg", "bathroomHallwayDoorDesc.ogg", 0)
+        safeRecording.construct("safeRecording", "safeRecording.ogg", "safeRecordingDesc.ogg", 0)
+        cellKey.construct("cellKey", "cellKey.ogg", "cellKeyDesc.ogg", 1)
+        passCard.construct("passCard", "passCard.ogg", "passCardDesc.ogg", 1)
+        upperHallwayDoor.construct("upperHallwayDoor", "upperHallwayDoor.ogg", "upperHallwayDoorDesc.ogg", 0)
+        notebook.construct("notebook", "notebook.ogg", "notebookDesc.ogg", 0)
+        mainEntrance.construct("mainEntrance", "mainEntrance.ogg", "mainEntranceDesc.ogg", 0)
+        masterBedroomDeskKey.construct("masterBedroomDeskKey", "masterBedroomDeskKey.ogg", "masterBedroomDeskKeyDesc.ogg", 1)
+        masterBedroomBed.construct("masterBedroomBed", "bed.ogg", "masterBedroomBedDesc.ogg", 0)
+        masterBedroomDesk.construct("masterBedroomDesk", "desk.ogg", "masterBedroomDeskDesc.ogg", 0)
+        libraryRecording.construct("libraryRecording", "recording.ogg", "libraryRecordingDesc.ogg", 0)
+        masterBedroomRecording.construct("masterBedroomRecording", "recording.ogg", "masterBedroomRecordingDesc.ogg", 0)
+        masterBathroomStarHole.construct("masterBathroomStarHole", "starHole.ogg", "starHoleDesc.ogg", 0)    
+        masterBathroomMirror.construct("masterBathroomMirror", "mirror.ogg", "mirrorDesc.ogg", 0)
+        knife.construct("knife", "knife.ogg", "knifeDesc.ogg", 1)
+        trappedHallwayDoorKey.construct("trappedHallwayDoorKey", "trappedHallwayDoorKey.ogg", "trappedHallwayDoorKeyDesc.ogg", 1)
+        sittingRoomDoor.construct("sittingRoomDoor", "sittingRoomDoor.ogg", "sittingRoomDoorDesc.ogg", 0)
+        eleanor.construct("eleanor", "eleanor.ogg", "eleanorDesc.ogg", 0)
+        gun.construct("gun", "gun.ogg", "gunDesc.ogg", 1)
+        labDoor.construct("labDoor", "labDoor.ogg", "labDoorDesc.ogg", 0)
+        ingredients.construct("ingredients", "ingredients.ogg", "ingredientsDesc.ogg", 1)
+        mazeDoor.construct("mazeDoor", "mazeDoor.ogg", "mazeDoorDesc.ogg", 0)
+        garageDoor.construct("garageDoor", "garageDoor.ogg", "garageDoorDesc.ogg", 0)
+        garageKey.construct("garageKey", "garageKey.ogg", "garageKeyDesc.ogg", 1)
+        gasoline.construct("gasoline", "gasoline.ogg", "gasolineDesc.ogg", 1)
+        trappedHallwayDoor.construct("trappedHallwayDoor", "trappedHallwayDoor.ogg", "trappedHallwayDoorDesc.ogg", 0)
+        barnDoor.construct("barnDoor", "barnDoor.ogg", "barnDoorDesc.ogg", 0)
+        barnSwitch.construct("barnSwitch", "barnSwitch.ogg", "barnSwitchDesc.ogg", 0)
+        eleanor2.construct("eleanor2", "eleanor.ogg", "eleanorDesc4.ogg", 0)
+       
+       
+        #itemUses stores all the possible item use combinations
+        #"itemUsed": [ ["usedOn", function], ["usedOn", function] ]
+        itemUses = {"player":[["journal", save], ["painting", playerToPainting], ["piano", playerToPiano], ["box", playerToBox], ["bathroomHallwayDoor", playerToBathroomHallwayDoor], ["computer", playerToComputer], ["safe", playerToSafe], ["barnSwitch", playerToBarnSwitch]],
+                    "scalpel":[["operatingTable", scalpelToOperatingTable]],
+                    "operatingRoomKey":[["operatingRoomDoor", operatingRoomKeyToOperatingRoomDoor]],
+                    "broom":[["shelf", broomToShelf]],
+                    "star":[["starHole", starToStarHole], ["masterBathroomStarHole", starToMasterBathroomStarHole]],
+                    "deskKey":[["desk", deskKeyToDesk]],
+                    "hammer":[["mirror", hammerToMirror], ["upperHallwayDoor", hammerToUpperHallwayDoor]],
+                    "cellKey":[["bathroomHallwayDoor", cellKeyToBathroomHallwayDoor]],
+                    "passCard":[["mainEntrance", passCardToMainEntrance], ["sittingRoomDoor", passCardToSittingRoomDoor], ["mazeDoor", passCardToMazeDoor], ["barnDoor", passCardToBarnDoor]],
+                    "masterBedroomDeskKey":[["masterBedroomDesk", masterBedroomDeskKeyToMasterBedroomDesk]],
+                    "knife":[["eleanor", knifeToEleanor], ["eleanor2", knifeToEleanor2]],
+                    "ingredients":[["eleanor", ingredientsToEleanor]],
+                    "garageKey":[["garageDoor", garageKeyToGarageDoor]],
+                    "gun":[["garageDoor", gunToGarageDoor]],
+                    "trappedHallwayDoorKey":[["trappedHallwayDoor", trappedHallwayDoorKeyToTrappedHallwayDoor]],
+                    "gasoline":[["eleanor2", gasolineToEleanor2]]}
+        roomDict = {"inventory":inventory,
+                    "operatingRoom":operatingRoom,
+                    "freezer":freezer,
+                    "basementHallway":basementHallway,
+                    "pianoRoom":pianoRoom,
+                    "elevator":elevator,
+                    "study":study,
+                    "upperHallway":upperHallway,
+                    "bedroom":bedroom,
+                    "bathroom":bathroom,
+                    "closet":closet,
+                    "bathroomHallway":bathroomHallway,
+                    "balcony":balcony,
+                    "westHallway":westHallway,
+                    "lobby":lobby,
+                    "library":library,
+                    "masterBedroom":masterBedroom,
+                    "masterBathroom":masterBathroom,
+                    "masterElevator":masterElevator,
+                    "eleanorsRoom":eleanorsRoom,
+                    "sittingRoom":sittingRoom,
+                    "basement":basement,
+                    "kitchen":kitchen,
+                    "lab":lab,
+                    "garage":garage,
+                    "trappedHallway":trappedHallway,
+                    "outside":outside,
+                    "barn":barn,
+                    "barnLoft":barnLoft}
+        actionList = [["move.ogg", move], ["useItem.ogg", useItem], ["examine.ogg", examine], ["quit.ogg", quit]]
+        yesNoList = [["yes.ogg", "yes"], ["no.ogg", "no"]]
+        menuList = [["newGame.ogg", newGame], ["loadGame.ogg", loadGame], ["options.ogg", options], ["quit.ogg", quit]]
+        saveList = [["slot1.ogg", "save1.txt"], ["slot2.ogg", "save2.txt"], ["slot3.ogg", "save3.txt"], ["slot4.ogg", "save4.txt"], ["slot5.ogg", "save5.txt"]]
     
-    operatingTable = Item()
-    scalpel = Item()
-    operatingRoomRecording = Item()
-    operatingRoomDoor = Item()
-    operatingRoomKey = Item()
-    freezerBodies = Item()
-    piano = Item()
-    painting = Item()
-    deskKey = Item()
-    studyRecording = Item()
-    computer = Item()
-    phone = Item()
-    safe = Item()
-    desk = Item()
-    bedroomRecording = Item()
-    bed = Item()
-    mirror = Item()
-    bathtub = Item()
-    shelf = Item()
-    box = Item()
-    broom = Item()
-    hammer = Item()
-    star = Item()
-    starHole = Item()
-    bathroomHallwayDoor = Item()
-    safeRecording = Item()
-    cellKey = Item()
-    passCard = Item()
-    upperHallwayDoor = Item()
-    notebook = Item()
-    mainEntrance = Item()
-    masterBedroomDeskKey = Item()
-    masterBedroomDesk = Item()
-    masterBedroomBed = Item()
-    libraryRecording = Item()
-    masterBedroomRecording = Item()
-    masterBathroomStarHole = Item()
-    masterBathroomMirror = Item()
-    sittingRoomDoor = Item()
-    knife = Item()
-    trappedHallwayDoorKey = Item()
-    eleanor = Item()
-    gun = Item()
-    labDoor = Item()
-    ingredients = Item()
-    mazeDoor = Item()
-    garageDoor = Item()
-    garageKey = Item()
-    gasoline = Item()
-    trappedHallwayDoor = Item()
-    barnDoor = Item()
-    barnSwitch = Item()
-    eleanor2 = Item()
-
-      
-    #construct the rooms and items
-    operatingRoom.construct("operatingRoom", "operatingRoom.ogg", "operatingRoomDesc.ogg", [], [operatingTable, scalpel])   #freezer, operatingRoomDoor accessible after scalpelToOperatingTable, locked door to basementHallway
-    freezer.construct("freezer", "freezer.ogg", "freezerDesc.ogg", [operatingRoom], [freezerBodies, operatingRoomKey])
-    basementHallway.construct("basementHallway", "basementHallway.ogg", "basementHallwayDesc.ogg", [operatingRoom, pianoRoom], [journal, labDoor]) #hidden door to elevator
-    pianoRoom.construct("pianoRoom", "pianoRoom.ogg", "pianoRoomDesc.ogg", [basementHallway], [painting, piano])
-    elevator.construct("elevator", "elevator.ogg", "elevatorDesc.ogg", [basementHallway, study], [])
-    study.construct("study", "study.ogg", "studyDesc.ogg", [upperHallway], [deskKey, studyRecording, computer, phone, safe])
-    upperHallway.construct("upperHallway", "upperHallway.ogg", "upperHallwayDesc.ogg", [study, bedroom, closet], [upperHallwayDoor, journal])
-    bedroom.construct("bedroom", "bedroom.ogg", "bedroomDesc.ogg", [upperHallway, bathroom], [desk, bed])
-    bathroom.construct("bathroom", "bathroom.ogg", "bathroomDesc.ogg", [bedroom], [journal, mirror, bathtub, shelf])
-    closet.construct("closet", "closet.ogg", "closetDesc.ogg", [upperHallway], [broom, hammer])
-    bathroomHallway.construct("bathroomHallway", "bathroomHallway.ogg", "bathroomHallwayDesc.ogg", [bathroom], [bathroomHallwayDoor])
-    balcony.construct("balcony", "balcony.ogg", "balconyDesc.ogg", [upperHallway, westHallway, lobby], [])
-    westHallway.construct("westHallway", "westHallway.ogg", "westHallwayDesc.ogg", [balcony, masterBedroom, library], [journal])
-    lobby.construct("lobby", "lobby.ogg", "lobbyDesc.ogg", [balcony, kitchen], [journal, mainEntrance, trappedHallwayDoor])
-    library.construct("library", "library.ogg", "libraryDesc.ogg", [westHallway], [notebook, masterBedroomDeskKey, libraryRecording])
-    masterBedroom.construct("masterBedroom", "masterBedroom.ogg", "masterBedroomDesc.ogg", [westHallway, masterBathroom], [masterBedroomDesk, masterBedroomBed])
-    masterBathroom.construct("masterBathroom", "masterBathroom.ogg", "masterBathroomDesc.ogg", [masterBedroom], [masterBathroomMirror, masterBathroomStarHole])
-    masterElevator.construct("masterElevator", "masterElevator.ogg", "masterElevatorDesc.ogg", [masterBathroom, sittingRoom, basement], [])
-    eleanorsRoom.construct("eleanorsRoom", "eleanorsRoom.ogg", "eleanorsRoomDesc.ogg", [sittingRoom], [eleanor])
-    sittingRoom.construct("sittingRoom", "sittingRoom.ogg", "sittingRoomDesc.ogg", [masterElevator], [journal, sittingRoomDoor])
-    basement.construct("basement", "basement.ogg", "basementDesc.ogg", [masterElevator], [journal, mazeDoor])
-    kitchen.construct("kitchen", "kitchen.ogg", "kitchenDesc.ogg", [lobby], [knife, garageDoor])
-    lab.construct("lab", "lab.ogg", "labDesc.ogg", [basementHallway], [])
-    garage.construct("garage", "garage.ogg", "garageDesc.ogg", [kitchen], [journal, gasoline, trappedHallwayDoorKey])
-    trappedHallway.construct("trappedHallway", "trappedHallway.ogg", "trappedHallwayDesc.ogg", [lobby, outside], []) #Desc, traps have been deactivated
-    outside.construct("outside", "outside.ogg", "outsideDesc.ogg", [trappedHallway], [journal, barnDoor])
-    barn.construct("barn", "barn.ogg", "barnDesc.ogg", [outside, barnLoft], [barnSwitch])
-    barnLoft.construct("barnLoft", "barnLoft.ogg", "barnLoftDesc.ogg", [barn], [eleanor2])
-   
-    operatingTable.construct("operatingTable", "operatingTable.ogg", "operatingTableDesc.ogg", 0)
-    scalpel.construct("scalpel", "scalpel.ogg", "scalpelDesc.ogg", 1)
-    operatingRoomRecording.construct("operatingRoomRecording", "recording.ogg", "operatingRoomRecordingDesc.ogg", 0)
-    operatingRoomDoor.construct("operatingRoomDoor", "operatingRoomDoor.ogg", "operatingRoomDoorDesc.ogg", 0)
-    operatingRoomKey.construct("operatingRoomKey", "operatingRoomKey.ogg", "operatingRoomKeyDesc.ogg", 1)
-    freezerBodies.construct("freezerBodies", "freezerBodies.ogg", "freezerBodiesDesc.ogg", 0)
-    piano.construct("piano", "piano.ogg", "pianoDesc.ogg", 0)
-    painting.construct("painting", "painting.ogg", "paintingDesc.ogg", 0)
-    deskKey.construct("deskKey", "deskKey.ogg", "deskKeyDesc.ogg", 1)
-    studyRecording.construct("studyRecording", "recording.ogg", "studyRecordingDesc.ogg", 0)
-    computer.construct("computer", "computer.ogg", "computerDesc.ogg", 0)
-    phone.construct("phone", "phone.ogg", "phoneDesc.ogg", 0)
-    safe.construct("safe", "safe.ogg", "safeDesc.ogg", 0)
-    desk.construct("desk", "desk.ogg", "deskDesc.ogg", 0)
-    bedroomRecording.construct("bedroomRecording", "recording.ogg", "bedroomRecordingDesc.ogg", 0)
-    bed.construct("bed", "bed.ogg", "bedDesc.ogg", 0)
-    mirror.construct("mirror", "mirror.ogg", "mirrorDesc.ogg", 0)
-    bathtub.construct("bathtub", "bathtub.ogg", "bathtubDesc.ogg", 0)
-    shelf.construct("shelf", "shelf.ogg", "shelfDesc.ogg", 0)
-    box.construct("box", "box.ogg", "boxDesc.ogg", 0)
-    broom.construct("broom", "broom.ogg", "broomDesc.ogg", 1)
-    hammer.construct("hammer", "hammer.ogg", "hammerDesc.ogg", 1)
-    star.construct("star", "star.ogg", "starDesc.ogg", 1)
-    starHole.construct("starHole", "starHole.ogg", "starHoleDesc.ogg", 0)
-    bathroomHallwayDoor.construct("bathroomHallwayDoor", "bathroomHallwayDoor.ogg", "bathroomHallwayDoorDesc.ogg", 0)
-    safeRecording.construct("safeRecording", "safeRecording.ogg", "safeRecordingDesc.ogg", 0)
-    cellKey.construct("cellKey", "cellKey.ogg", "cellKeyDesc.ogg", 1)
-    passCard.construct("passCard", "passCard.ogg", "passCardDesc.ogg", 1)
-    upperHallwayDoor.construct("upperHallwayDoor", "upperHallwayDoor.ogg", "upperHallwayDoorDesc.ogg", 0)
-    notebook.construct("notebook", "notebook.ogg", "notebookDesc.ogg", 0)
-    mainEntrance.construct("mainEntrance", "mainEntrance.ogg", "mainEntranceDesc.ogg", 0)
-    masterBedroomDeskKey.construct("masterBedroomDeskKey", "masterBedroomDeskKey.ogg", "masterBedroomDeskKeyDesc.ogg", 1)
-    masterBedroomBed.construct("masterBedroomBed", "bed.ogg", "masterBedroomBedDesc.ogg", 0)
-    masterBedroomDesk.construct("masterBedroomDesk", "desk.ogg", "masterBedroomDeskDesc.ogg", 0)
-    libraryRecording.construct("libraryRecording", "recording.ogg", "libraryRecordingDesc.ogg", 0)
-    masterBedroomRecording.construct("masterBedroomRecording", "recording.ogg", "masterBedroomRecordingDesc.ogg", 0)
-    masterBathroomStarHole.construct("masterBathroomStarHole", "starHole.ogg", "starHoleDesc.ogg", 0)    
-    masterBathroomMirror.construct("masterBathroomMirror", "mirror.ogg", "mirrorDesc.ogg", 0)
-    knife.construct("knife", "knife.ogg", "knifeDesc.ogg", 1)
-    trappedHallwayDoorKey.construct("trappedHallwayDoorKey", "trappedHallwayDoorKey.ogg", "trappedHallwayDoorKeyDesc.ogg", 1)
-    sittingRoomDoor.construct("sittingRoomDoor", "sittingRoomDoor.ogg", "sittingRoomDoorDesc.ogg", 0)
-    eleanor.construct("eleanor", "eleanor.ogg", "eleanorDesc.ogg", 0)
-    gun.construct("gun", "gun.ogg", "gunDesc.ogg", 1)
-    labDoor.construct("labDoor", "labDoor.ogg", "labDoorDesc.ogg", 0)
-    ingredients.construct("ingredients", "ingredients.ogg", "ingredientsDesc.ogg", 1)
-    mazeDoor.construct("mazeDoor", "mazeDoor.ogg", "mazeDoorDesc.ogg", 0)
-    garageDoor.construct("garageDoor", "garageDoor.ogg", "garageDoorDesc.ogg", 0)
-    garageKey.construct("garageKey", "garageKey.ogg", "garageKeyDesc.ogg", 1)
-    gasoline.construct("gasoline", "gasoline.ogg", "gasolineDesc.ogg", 1)
-    trappedHallwayDoor.construct("trappedHallwayDoor", "trappedHallwayDoor.ogg", "trappedHallwayDoorDesc.ogg", 0)
-    barnDoor.construct("barnDoor", "barnDoor.ogg", "barnDoorDesc.ogg", 0)
-    barnSwitch.construct("barnSwitch", "barnSwitch.ogg", "barnSwitchDesc.ogg", 0)
-    eleanor2.construct("eleanor2", "eleanor.ogg", "eleanorDesc4.ogg", 0)
-   
-   
-    #itemUses stores all the possible item use combinations
-    #"itemUsed": [ ["usedOn", function], ["usedOn", function] ]
-    itemUses = {"player":[["journal", save], ["painting", playerToPainting], ["piano", playerToPiano], ["box", playerToBox], ["bathroomHallwayDoor", playerToBathroomHallwayDoor], ["computer", playerToComputer], ["safe", playerToSafe], ["barnSwitch", playerToBarnSwitch]],
-                "scalpel":[["operatingTable", scalpelToOperatingTable]],
-                "operatingRoomKey":[["operatingRoomDoor", operatingRoomKeyToOperatingRoomDoor]],
-                "broom":[["shelf", broomToShelf]],
-                "star":[["starHole", starToStarHole], ["masterBathroomStarHole", starToMasterBathroomStarHole]],
-                "deskKey":[["desk", deskKeyToDesk]],
-                "hammer":[["mirror", hammerToMirror], ["upperHallwayDoor", hammerToUpperHallwayDoor]],
-                "cellKey":[["bathroomHallwayDoor", cellKeyToBathroomHallwayDoor]],
-                "passCard":[["mainEntrance", passCardToMainEntrance], ["sittingRoomDoor", passCardToSittingRoomDoor], ["mazeDoor", passCardToMazeDoor], ["barnDoor", passCardToBarnDoor]],
-                "masterBedroomDeskKey":[["masterBedroomDesk", masterBedroomDeskKeyToMasterBedroomDesk]],
-                "knife":[["eleanor", knifeToEleanor], ["eleanor2", knifeToEleanor2]],
-                "ingredients":[["eleanor", ingredientsToEleanor]],
-                "garageKey":[["garageDoor", garageKeyToGarageDoor]],
-                "gun":[["garageDoor", gunToGarageDoor]],
-                "trappedHallwayDoorKey":[["trappedHallwayDoor", trappedHallwayDoorKeyToTrappedHallwayDoor]],
-                "gasoline":[["eleanor2", gasolineToEleanor2]]}
-    roomDict = {"inventory":inventory,
-                "operatingRoom":operatingRoom,
-                "freezer":freezer,
-                "basementHallway":basementHallway,
-                "pianoRoom":pianoRoom,
-                "elevator":elevator,
-                "study":study,
-                "upperHallway":upperHallway,
-                "bedroom":bedroom,
-                "bathroom":bathroom,
-                "closet":closet,
-                "bathroomHallway":bathroomHallway,
-                "balcony":balcony,
-                "westHallway":westHallway,
-                "lobby":lobby,
-                "library":library,
-                "masterBedroom":masterBedroom,
-                "masterBathroom":masterBathroom,
-                "masterElevator":masterElevator,
-                "eleanorsRoom":eleanorsRoom,
-                "sittingRoom":sittingRoom,
-                "basement":basement,
-                "kitchen":kitchen,
-                "lab":lab,
-                "garage":garage,
-                "trappedHallway":trappedHallway,
-                "outside":outside,
-                "barn":barn,
-                "barnLoft":barnLoft}
-    actionList = [["move.ogg", move], ["useItem.ogg", useItem], ["examine.ogg", examine], ["quit.ogg", quit]]
-    yesNoList = [["yes.ogg", "yes"], ["no.ogg", "no"]]
-    menuList = [["newGame.ogg", newGame], ["loadGame.ogg", loadGame], ["options.ogg", options], ["quit.ogg", quit]]
-    saveList = [["slot1.ogg", "save1.txt"], ["slot2.ogg", "save2.txt"], ["slot3.ogg", "save3.txt"], ["slot4.ogg", "save4.txt"], ["slot5.ogg", "save5.txt"]]
-
-    SPEED_NORMAL = 45000
-    SPEED_FAST = 65000
-    voiceSpeed = SPEED_NORMAL
-    menu()    
-  finally:        
-    pygame.quit()
+        SPEED_NORMAL = 45000
+        SPEED_FAST = 65000
+        voiceSpeed = SPEED_NORMAL
+        menu()    
+    finally:        
+        pygame.quit()
