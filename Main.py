@@ -825,8 +825,6 @@ def playerToComputer():
         playSound("chime.ogg")
         #print "The basement lab is now unlocked. You can access the lab by going down the elevator in this room"
         playSound("computerActivateElevator.ogg")
-        time.sleep(2)
-          
         roomDict["basementHallway"]["rooms"].insert(0, lab)
         roomDict["basementHallway"]["items"].remove(labDoor)
         roomDict["study"]["rooms"].insert(0, elevator)
