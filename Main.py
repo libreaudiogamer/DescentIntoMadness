@@ -639,60 +639,60 @@ def passCardToSittingRoomDoor():
     "Puzzle to open Eleanor's room"
     #print "There are 2 speakers in front of you, one on the left, one on the right. Below each speaker is a button. When you insert the pass key, sounds start playing from the left and right speakers.
     playSound("passCardToSittingRoomDoor1.ogg")
-    buttonList=[ ["leftButton.ogg", "leftButton"], ["rightButton.ogg", "rightButton"], ["cancel.ogg", "cancel"] ] 
-    #sequence is L, R, L, L
-    playLeftSound()
-    playRightSound()
-    playLeftSound()
-    playLeftSound()
-    #print "Press a button"
-    playSound("passCardToSittingRoomDoor2.ogg")
-    buttonPressed = selectOption(buttonList)
-    if buttonPressed == "cancel":
-        return 0
-    buttonSequence = buttonPressed
-    for i in range(3):
-        #print "Press a button"
-        playSound("passCardToSittingRoomDoor2.ogg")
-        buttonPressed = selectOption(buttonList)
-        if buttonPressed == "cancel":
-            return 0
-        buttonSequence += buttonPressed
-    if(buttonSequence != "leftButtonrightButtonleftButtonleftButton"):
-        playSound("buzzer.ogg")
-        #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
-        playSound("passCardToSittingRoomDoor3.ogg")
-        gameOver()
-    playSound("chime.ogg")
+#    buttonList=[ ["leftButton.ogg", "leftButton"], ["rightButton.ogg", "rightButton"], ["cancel.ogg", "cancel"] ] 
+#    #sequence is L, R, L, L
+#    playLeftSound()
+#    playRightSound()
+#    playLeftSound()
+#    playLeftSound()
+#    #print "Press a button"
+#    playSound("passCardToSittingRoomDoor2.ogg")
+#    buttonPressed = selectOption(buttonList)
+#    if buttonPressed == "cancel":
+#        return 0
+#    buttonSequence = buttonPressed
+#    for i in range(3):
+#        #print "Press a button"
+#        playSound("passCardToSittingRoomDoor2.ogg")
+#        buttonPressed = selectOption(buttonList)
+#        if buttonPressed == "cancel":
+#            return 0
+#        buttonSequence += buttonPressed
+#    if(buttonSequence != "leftButtonrightButtonleftButtonleftButton"):
+#        playSound("buzzer.ogg")
+#        #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
+#        playSound("passCardToSittingRoomDoor3.ogg")
+#        gameOver()
+#    playSound("chime.ogg")
 
-    #second sequence is R, R, R, L, R, L
-    playRightSound()
-    playRightSound()
-    playRightSound()
-    playLeftSound()
-    playRightSound()
-    playLeftSound()
-    #print "Press a button"
-    playSound("passCardToSittingRoomDoor2.ogg")
-    buttonPressed = selectOption(buttonList)
-    if buttonPressed == "cancel":
-        return 0
-    buttonSequence = buttonPressed
-    for i in range(5):
-        #print "Press a button"
-        playSound("passCardToSittingRoomDoor2.ogg")
-        buttonPressed = selectOption(buttonList)
-        if buttonPressed == "cancel":
-            return 0
-        buttonSequence += buttonPressed
-    if(buttonSequence != "rightButtonrightButtonrightButtonleftButtonrightButtonleftButton"):
-        playSound("buzzer.ogg")
-        #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
-        playSound("passCardToSittingRoomDoor3.ogg")
-        gameOver()
+#    #second sequence is R, R, R, L, R, L
+#    playRightSound()
+#    playRightSound()
+#    playRightSound()
+#    playLeftSound()
+#    playRightSound()
+#    playLeftSound()
+#    #print "Press a button"
+#    playSound("passCardToSittingRoomDoor2.ogg")
+#    buttonPressed = selectOption(buttonList)
+#    if buttonPressed == "cancel":
+#        return 0
+#    buttonSequence = buttonPressed
+#    for i in range(5):
+#        #print "Press a button"
+#        playSound("passCardToSittingRoomDoor2.ogg")
+#        buttonPressed = selectOption(buttonList)
+#        if buttonPressed == "cancel":
+#            return 0
+#        buttonSequence += buttonPressed
+#    if(buttonSequence != "rightButtonrightButtonrightButtonleftButtonrightButtonleftButton"):
+#        playSound("buzzer.ogg")
+#        #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
+#        playSound("passCardToSittingRoomDoor3.ogg")
+#        gameOver()
   
     playSound("chime.ogg")
-    #print "The door slides open. You can now move into the dark room ahead"
+#    #print "The door slides open. You can now move into the dark room ahead"
     playSound("passCardToSittingRoomDoor4.ogg")
     roomDict["sittingRoom"]["rooms"].insert(0, eleanorsRoom)
     roomDict["sittingRoom"]["items"].remove(sittingRoomDoor)
@@ -707,100 +707,100 @@ def knifeToEleanor():
     #eleanor["sDescription"]="eleanorDesc2.ogg"
       
 def passCardToMazeDoor():
-    "Starts the maze. Follow the sound to get to the exit"
+#    "Starts the maze. Follow the sound to get to the exit"
     playSound("passCardToMazeDoor0.ogg")
-  
-    song.Stop()
-    exitSound = pySonic.Source()
-    exitSound.Sound = pySonic.FileStream("sounds/pianoC.ogg", pySonic.Constants.FSOUND_LOOP_NORMAL)
-    exitSound.Position = (0, 4, 0)
-    exitSound.Velocity = (0, 0, 0)
-    exitSound.Volume = 50
-    exitSound.Play()
-    
-    #maze is 5 x 5 matrix. 0 denotes not movable. 1 denotes movable. 2 denotes monster. 3 denotes end.
-    mazeMatrix = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
-    mazeMatrix[0][0]=2
-    mazeMatrix[1][0]=1
-    mazeMatrix[2][0]=1
-    mazeMatrix[3][0]=1
-    mazeMatrix[3][1]=1
-    mazeMatrix[3][2]=1
-    mazeMatrix[2][2]=1
-    mazeMatrix[1][2]=1
-    mazeMatrix[1][3]=1
-    mazeMatrix[1][4]=1
-    mazeMatrix[0][4]=3
-    mazeMatrix[0][2]=2
-    mazeMatrix[3][3]=2
-    mazeMatrix[4][2]=2
+#  
+#    song.Stop()
+#    exitSound = pySonic.Source()
+#    exitSound.Sound = pySonic.FileStream("sounds/pianoC.ogg", pySonic.Constants.FSOUND_LOOP_NORMAL)
+#    exitSound.Position = (0, 4, 0)
+#    exitSound.Velocity = (0, 0, 0)
+#    exitSound.Volume = 50
+#    exitSound.Play()
+#    
+#    #maze is 5 x 5 matrix. 0 denotes not movable. 1 denotes movable. 2 denotes monster. 3 denotes end.
+#    mazeMatrix = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+#    mazeMatrix[0][0]=2
+#    mazeMatrix[1][0]=1
+#    mazeMatrix[2][0]=1
+#    mazeMatrix[3][0]=1
+#    mazeMatrix[3][1]=1
+#    mazeMatrix[3][2]=1
+#    mazeMatrix[2][2]=1
+#    mazeMatrix[1][2]=1
+#    mazeMatrix[1][3]=1
+#    mazeMatrix[1][4]=1
+#    mazeMatrix[0][4]=3
+#    mazeMatrix[0][2]=2
+#    mazeMatrix[3][3]=2
+#    mazeMatrix[4][2]=2
 
-    #start at (3,0)
-    positionX=3
-    positionY=0
-    #w.Listener.Position = (positionX, positionY, 0) 
+#    #start at (3,0)
+#    positionX=3
+#    positionY=0
+#    #w.Listener.Position = (positionX, positionY, 0) 
 
-    #print "You are now in the maze. Navigate by going north, west, south, or east. There is a sound coming from the exit, and you can assume that you are always facing north "
-    playSound("passCardToMazeDoor1.ogg")
+#    #print "You are now in the maze. Navigate by going north, west, south, or east. There is a sound coming from the exit, and you can assume that you are always facing north "
+#    playSound("passCardToMazeDoor1.ogg")
 
-    while 1:
-        #make the move list
-        mazeMoveList = []
-        #north
-        if (positionY + 1 <= 4) and (mazeMatrix[positionX][positionY+1] != 0):
-            mazeMoveList.append(["north.ogg", "north"])
-        #west
-        if (positionX - 1 >= 0) and (mazeMatrix[positionX-1][positionY] != 0):
-            mazeMoveList.append(["west.ogg", "west"])
-        #south
-        if (positionY - 1 >= 0) and (mazeMatrix[positionX][positionY-1] != 0):
-            mazeMoveList.append(["south.ogg", "south"])
-        #east
-        if (positionX + 1 <= 4) and (mazeMatrix[positionX+1][positionY] != 0):
-            mazeMoveList.append(["east.ogg", "east"])             
-        
-        #move
-        #print "The following paths are open:"
-        playSound("passCardToMazeDoor2.ogg")
-        for elem in mazeMoveList:
-            playSound(elem[0])
-        #print "Select a direction to move."
-        playSound("passCardToMazeDoor3.ogg")
-        mazeMove = selectOption(mazeMoveList)
-        
-        #update position
-        if mazeMove == "north":
-            positionY += 1
-        elif mazeMove == "south":
-            positionY -= 1
-        elif mazeMove == "east":
-            positionX += 1
-        elif mazeMove == "west":
-            positionX -= 1
-        exitSound.Position = (0-positionX, 4-positionY, 0)
-        exitSound.Play()
+#    while 1:
+#        #make the move list
+#        mazeMoveList = []
+#        #north
+#        if (positionY + 1 <= 4) and (mazeMatrix[positionX][positionY+1] != 0):
+#            mazeMoveList.append(["north.ogg", "north"])
+#        #west
+#        if (positionX - 1 >= 0) and (mazeMatrix[positionX-1][positionY] != 0):
+#            mazeMoveList.append(["west.ogg", "west"])
+#        #south
+#        if (positionY - 1 >= 0) and (mazeMatrix[positionX][positionY-1] != 0):
+#            mazeMoveList.append(["south.ogg", "south"])
+#        #east
+#        if (positionX + 1 <= 4) and (mazeMatrix[positionX+1][positionY] != 0):
+#            mazeMoveList.append(["east.ogg", "east"])             
+#        
+#        #move
+#        #print "The following paths are open:"
+#        playSound("passCardToMazeDoor2.ogg")
+#        for elem in mazeMoveList:
+#            playSound(elem[0])
+#        #print "Select a direction to move."
+#        playSound("passCardToMazeDoor3.ogg")
+#        mazeMove = selectOption(mazeMoveList)
+#        
+#        #update position
+#        if mazeMove == "north":
+#            positionY += 1
+#        elif mazeMove == "south":
+#            positionY -= 1
+#        elif mazeMove == "east":
+#            positionX += 1
+#        elif mazeMove == "west":
+#            positionX -= 1
+#        exitSound.Position = (0-positionX, 4-positionY, 0)
+#        exitSound.Play()
       
-            
-        if(mazeMatrix[positionX][positionY] == 2):
+#            
+#        if(mazeMatrix[positionX][positionY] == 2):
             #print "ROAR! It's a monster."
-            playSound("passCardToMazeDoor4.ogg")
-            playSound("whatItemWillYouUse.ogg")
-            itemUsed = select([elem for elem in roomDict["inventory"]["items"]])
-            if itemUsed["name"] == "gun":
-                #print "The monster lunges at you, but you side step and fire your gun! BANG! And the monster falls dead"
-                playSound("passCardToMazeDoor5.ogg")
-            else:
-                #print "The monster is not phased, and lunges straight for your neck, ripping out your throat"
-                playSound("passCardToMazeDoor6.ogg")
-                song.Play()
-                gameOver()
-        elif(mazeMatrix[positionX][positionY]==3):
-            #print "You've reached the end of the maze. After rummaging through stacks of chemicals, you find the ingredients that Eleanor told you about. You make your way back to the entrance of the maze, and are now back in the basement"
-            playSound("passCardToMazeDoor7.ogg")
-            roomDict["inventory"]["items"].append(ingredients)
-            exitSound.Stop()
-            song.Play()
-            return 0
+#            playSound("passCardToMazeDoor4.ogg")
+#            playSound("whatItemWillYouUse.ogg")
+#            itemUsed = select([elem for elem in roomDict["inventory"]["items"]])
+#            if itemUsed["name"] == "gun":
+#                #print "The monster lunges at you, but you side step and fire your gun! BANG! And the monster falls dead"
+#                playSound("passCardToMazeDoor5.ogg")
+#            else:
+#                #print "The monster is not phased, and lunges straight for your neck, ripping out your throat"
+#                playSound("passCardToMazeDoor6.ogg")
+#                song.Play()
+#                gameOver()
+#        elif(mazeMatrix[positionX][positionY]==3):
+#            #print "You've reached the end of the maze. After rummaging through stacks of chemicals, you find the ingredients that Eleanor told you about. You make your way back to the entrance of the maze, and are now back in the basement"
+    playSound("passCardToMazeDoor7.ogg")
+    roomDict["inventory"]["items"].append(ingredients)
+#            exitSound.Stop()
+#            song.Play()
+#            return 0
   
 def playerToComputer():
     "Attempt to logon to computer. Need passkey from notebook, which is 9 3 1"
