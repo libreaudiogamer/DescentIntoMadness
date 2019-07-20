@@ -619,7 +619,7 @@ def starToMasterBathroomStarHole():
 def playLeftSound():
     "For the passCardToSittingRoomDoor puzzle. Plays a sound to the left"
     chan=pygame.mixer.find_channel()
-    leftSound = pygame.mixer.Sound("sounds/pianoC.ogg")
+    LeftSound = pygame.mixer.Sound("sounds/pianoC.ogg")
     chan.set_volume(1,0)
     chan.play(LeftSound)
     while chan.get_busy():
@@ -639,58 +639,57 @@ def passCardToSittingRoomDoor():
     "Puzzle to open Eleanor's room"
     #print "There are 2 speakers in front of you, one on the left, one on the right. Below each speaker is a button. When you insert the pass key, sounds start playing from the left and right speakers.
     playSound("passCardToSittingRoomDoor1.ogg")
-#    buttonList=[ ["leftButton.ogg", "leftButton"], ["rightButton.ogg", "rightButton"], ["cancel.ogg", "cancel"] ] 
+    buttonList=[ ["leftButton.ogg", "leftButton"], ["rightButton.ogg", "rightButton"], ["cancel.ogg", "cancel"] ] 
 #    #sequence is L, R, L, L
-#    playLeftSound()
-#    playRightSound()
-#    playLeftSound()
-#    playLeftSound()
+    playLeftSound()
+    playRightSound()
+    playLeftSound()
+    playLeftSound()
 #    #print "Press a button"
-#    playSound("passCardToSittingRoomDoor2.ogg")
-#    buttonPressed = selectOption(buttonList)
-#    if buttonPressed == "cancel":
-#        return 0
-#    buttonSequence = buttonPressed
-#    for i in range(3):
+    playSound("passCardToSittingRoomDoor2.ogg")
+    buttonPressed = selectOption(buttonList)
+    if buttonPressed == "cancel":
+        return 0
+    buttonSequence = buttonPressed
+    for i in range(3):
 #        #print "Press a button"
-#        playSound("passCardToSittingRoomDoor2.ogg")
-#        buttonPressed = selectOption(buttonList)
-#        if buttonPressed == "cancel":
-#            return 0
-#        buttonSequence += buttonPressed
-#    if(buttonSequence != "leftButtonrightButtonleftButtonleftButton"):
+        playSound("passCardToSittingRoomDoor2.ogg")
+        buttonPressed = selectOption(buttonList)
+        if buttonPressed == "cancel":
+            return 0
+        buttonSequence += buttonPressed
+    if(buttonSequence != "leftButtonrightButtonleftButtonleftButton"):
 #        playSound("buzzer.ogg")
 #        #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
-#        playSound("passCardToSittingRoomDoor3.ogg")
-#        gameOver()
-#    playSound("chime.ogg")
+        playSound("passCardToSittingRoomDoor3.ogg")
+        gameOver()
+    playSound("chime.ogg")
 
 #    #second sequence is R, R, R, L, R, L
-#    playRightSound()
-#    playRightSound()
-#    playRightSound()
-#    playLeftSound()
-#    playRightSound()
-#    playLeftSound()
+    playRightSound()
+    playRightSound()
+    playRightSound()
+    playLeftSound()
+    playRightSound()
+    playLeftSound()
 #    #print "Press a button"
-#    playSound("passCardToSittingRoomDoor2.ogg")
-#    buttonPressed = selectOption(buttonList)
-#    if buttonPressed == "cancel":
-#        return 0
-#    buttonSequence = buttonPressed
-#    for i in range(5):
+    playSound("passCardToSittingRoomDoor2.ogg")
+    buttonPressed = selectOption(buttonList)
+    if buttonPressed == "cancel":
+        return 0
+    buttonSequence = buttonPressed
+    for i in range(5):
 #        #print "Press a button"
-#        playSound("passCardToSittingRoomDoor2.ogg")
-#        buttonPressed = selectOption(buttonList)
-#        if buttonPressed == "cancel":
-#            return 0
-#        buttonSequence += buttonPressed
-#    if(buttonSequence != "rightButtonrightButtonrightButtonleftButtonrightButtonleftButton"):
-#        playSound("buzzer.ogg")
+        playSound("passCardToSittingRoomDoor2.ogg")
+        buttonPressed = selectOption(buttonList)
+        if buttonPressed == "cancel":
+            return 0
+        buttonSequence += buttonPressed
+    if(buttonSequence != "rightButtonrightButtonrightButtonleftButtonrightButtonleftButton"):
+        playSound("buzzer.ogg")
 #        #print "Apparently you've inputted the wrong sequence of button presses. A trap door opens underneath you, revealing a pit of spikes. You fall to your death"
-#        playSound("passCardToSittingRoomDoor3.ogg")
-#        gameOver()
-  
+        playSound("passCardToSittingRoomDoor3.ogg")
+        gameOver()
     playSound("chime.ogg")
 #    #print "The door slides open. You can now move into the dark room ahead"
     playSound("passCardToSittingRoomDoor4.ogg")
