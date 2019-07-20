@@ -238,7 +238,7 @@ def loadGame():
     try:
         slot = selectOption(saveList)
 #        print slot
-        fileHandle = open ( slot )
+        fileHandle = open ( slot,'rb')
         [currentRoom, roomDict] = pickle.load ( fileHandle )
         fileHandle.close()
     except IOError:
@@ -256,7 +256,7 @@ def save():
     playSound("saveSlot.ogg")
     try:
         slot = selectOption(saveList)
-        fileHandle = open ( slot, 'w' )
+        fileHandle = open ( slot, 'wb' )
         pickle.dump ( [currentRoom, roomDict], fileHandle ) #hopefully this works
         fileHandle.close()
         #print "Your game was successfully saved"
