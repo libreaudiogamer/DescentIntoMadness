@@ -215,7 +215,7 @@ def menu():
 def newGame():
     "New Game"
     pygame.mixer.music.load("sounds/music1.ogg")
-    pygame.mixer.music.set_volume(.25)
+    pygame.mixer.music.set_volume(.15)
     pygame.mixer.music.play(-1)
     constructRoomsItems()
     global currentRoom
@@ -229,7 +229,7 @@ def newGame():
 def loadGame():
     "Load Game"
     pygame.mixer.music.load("sounds/music1.ogg")
-    pygame.mixer.music.set_volume(.25)
+    pygame.mixer.music.set_volume(.15)
     pygame.mixer.music.play(-1)
     global currentRoom, roomDict
     #retrieve currentRoom and roomDict
@@ -618,24 +618,23 @@ def starToMasterBathroomStarHole():
 
 def playLeftSound():
     "For the passCardToSittingRoomDoor puzzle. Plays a sound to the left"
-    leftSound = pySonic.Source()
-    leftSound.Sound = pySonic.FileSample("sounds/pianoC.ogg")
-    leftSound.Position = (-3, 0, 0)
-    leftSound.Velocity = (0, 0, 0)
-    leftSound.Play()
-    while leftSound.IsPlaying():
-        time.sleep(0.5)
-  
+    chan=pygame.mixer.find_channel()
+    leftSound = pygame.mixer.Sound("sounds/pianoC.ogg")
+    chan.set_volume(1,0)
+    chan.play(LeftSound)
+    while chan.get_busy():
+        pygame.event.pump()
+        pygame.time.delay(100)
+
 def playRightSound():
     "For the passCardToSittingRoomDoor puzzle. Plays a sound to the right"
-    rightSound = pySonic.Source()
-    rightSound.Sound = pySonic.FileSample("sounds/pianoF.ogg")
-    rightSound.Position = (3, 0, 0)
-    rightSound.Velocity = (0, 0, 0)
-    rightSound.Play()
-    while rightSound.IsPlaying():
-        time.sleep(0.5)
-      
+    chan=pygame.mixer.find_channel()
+    RightSound = pygame.mixer.Sound("sounds/pianoF.ogg")
+    chan.set_volume(0, 1)
+    chan.play(RightSound)
+    while chan.get_busy():
+        pygame.event.pump()
+        pygame.time.delay(100)
 def passCardToSittingRoomDoor():
     "Puzzle to open Eleanor's room"
     #print "There are 2 speakers in front of you, one on the left, one on the right. Below each speaker is a button. When you insert the pass key, sounds start playing from the left and right speakers.
