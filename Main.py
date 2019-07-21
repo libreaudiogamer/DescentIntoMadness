@@ -207,8 +207,6 @@ def menu():
         #to prevent accidental quits
         if menuOption == "esc":
             pass
-        #elif menuOption == loadGame:
-        #    loadGame()
         else: 
             menuOption()
 
@@ -227,6 +225,8 @@ def newGame():
     gameLoop()
     
 def loadGame():
+    playSound("buzzer.ogg")
+    return
     "Load Game"
     pygame.mixer.music.load("sounds/music1.ogg")
     pygame.mixer.music.set_volume(.15)
@@ -249,6 +249,8 @@ def loadGame():
     gameLoop()
 
 def save():
+    playSound("buzzer.ogg")
+    return
     "Save"
     global currentRoom, roomDict
     #write out roomDict and currentRoom to the file
