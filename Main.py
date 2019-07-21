@@ -701,10 +701,12 @@ def knifeToEleanor():
     #print "Eleanor conversation"
     playSound("knifeToEleanor.ogg")
     roomDict["inventory"]["items"].append(gun)
-#!!! This might not work
     roomDict["eleanorsRoom"]["items"].remove(eleanor)
-    #eleanor["sDescription"]="eleanorDesc2.ogg"
-      
+    eleanor["sDescription"]="eleanorDesc2.ogg"
+    roomDict["basementHallway"]["rooms"].insert(0, lab)
+    roomDict["basementHallway"]["items"].remove(labDoor)
+    roomDict["lab"]["items"].insert(0, eleanor)
+
 def passCardToMazeDoor():
 #    "Starts the maze. Follow the sound to get to the exit"
     playSound("passCardToMazeDoor0.ogg")
@@ -804,7 +806,6 @@ def passCardToMazeDoor():
 def playerToComputer():
     "Attempt to logon to computer. Need passkey from notebook, which is 9 3 1"
     numberList = [ ["1.ogg", "1"], ["2.ogg", "2"], ["3.ogg", "3"], ["4.ogg", "4"], ["5.ogg", "5"], ["6.ogg", "6"], ["7.ogg", "7"], ["8.ogg", "8"], ["9.ogg", "9"], ["0.ogg", "0"] ]
-
     #print "You attempt to use the computer and it starts to speak
     #playTTS("Please enter the pass key to unlock the basement lab")
     #print "Choose a number"
@@ -814,7 +815,6 @@ def playerToComputer():
     #print "Choose a second number"
     playSound("safeChoose2.ogg")
     numberChosen2 = selectOption(numberList)
-
     #print "Choose a third number"
     playSound("safeChoose3.ogg")
     numberChosen3 = selectOption(numberList)
@@ -824,13 +824,7 @@ def playerToComputer():
         playSound("chime.ogg")
         #print "The basement lab is now unlocked. You can access the lab by going down the elevator in this room"
         playSound("computerActivateElevator.ogg")
-        roomDict["basementHallway"]["rooms"].insert(0, lab)
-        roomDict["basementHallway"]["items"].remove(labDoor)
         roomDict["study"]["rooms"].insert(0, elevator)
-#!!! this might not work
-        eleanor["sDescription"]="eleanorDesc2.ogg"
-        #roomDict["eleanorsRoom"]["items"].remove(eleanor)
-        roomDict["lab"]["items"].insert(0, eleanor)
     else:
         #print "Err!"
         playSound("buzzer.ogg")
