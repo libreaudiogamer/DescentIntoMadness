@@ -21,6 +21,34 @@ from threading import Timer
 #global currentRoom, roomDict
 currentRoom = None
 roomDict = None
+operatingRoom = None
+freezer= None
+basementHallway = None
+pianoRoom= None
+elevator = None
+study= None
+upperHallway = None
+bedroom = None
+bathroo= None
+closet = None
+bathroomHallway= None
+balcony = None
+westHallway= None
+lobby= None
+library = None
+masterBedroom= None
+masterBathroom= None
+masterElevator= None
+eleanorsRoom = None
+sittingRoom = None
+basement = None
+kitchen= None
+lab = None
+garage = None
+trappedHallway = None
+outside = None
+barn = None
+barnLoft= None
 
 #******** PYGAME INITIALIZATION ********************************************************************
 import pygame
@@ -225,13 +253,11 @@ def newGame():
     gameLoop()
     
 def loadGame():
-    playSound("buzzer.ogg")
-    return
     "Load Game"
     pygame.mixer.music.load("sounds/music1.ogg")
     pygame.mixer.music.set_volume(.15)
     pygame.mixer.music.play(-1)
-    global currentRoom, roomDict
+    global operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict
     #retrieve currentRoom and roomDict
     #print "Please select a save slot to load"
     playSound("selectLoad.ogg")
@@ -239,7 +265,7 @@ def loadGame():
         slot = selectOption(saveList)
 #        print slot
         fileHandle = open ( slot,'rb')
-        [currentRoom, roomDict] = pickle.load ( fileHandle )
+        [operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict] = pickle.load ( fileHandle )
         fileHandle.close()
     except IOError:
         #print "That file is empty or doesn't exist. You will now be returned to the main menu"
@@ -249,8 +275,6 @@ def loadGame():
     gameLoop()
 
 def save():
-    playSound("buzzer.ogg")
-    return
     "Save"
     global currentRoom, roomDict
     #write out roomDict and currentRoom to the file
@@ -259,7 +283,7 @@ def save():
     try:
         slot = selectOption(saveList)
         fileHandle = open ( slot, 'wb' )
-        pickle.dump ( [currentRoom, roomDict], fileHandle ) #hopefully this works
+        pickle.dump ( [operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict], fileHandle ) #hopefully this works
         fileHandle.close()
         #print "Your game was successfully saved"
         playSound("saveSuccessful.ogg")
@@ -984,60 +1008,6 @@ def constructRoomsItems():
     barn.construct("barn", "barn.ogg", "barnDesc.ogg", [outside, barnLoft], [barnSwitch])
     barnLoft.construct("barnLoft", "barnLoft.ogg", "barnLoftDesc.ogg", [barn], [eleanor2])
    
-    operatingTable.construct("operatingTable", "operatingTable.ogg", "operatingTableDesc.ogg", 0)
-    scalpel.construct("scalpel", "scalpel.ogg", "scalpelDesc.ogg", 1)
-    operatingRoomRecording.construct("operatingRoomRecording", "recording.ogg", "operatingRoomRecordingDesc.ogg", 0)
-    operatingRoomDoor.construct("operatingRoomDoor", "operatingRoomDoor.ogg", "operatingRoomDoorDesc.ogg", 0)
-    operatingRoomKey.construct("operatingRoomKey", "operatingRoomKey.ogg", "operatingRoomKeyDesc.ogg", 1)
-    freezerBodies.construct("freezerBodies", "freezerBodies.ogg", "freezerBodiesDesc.ogg", 0)
-    piano.construct("piano", "piano.ogg", "pianoDesc.ogg", 0)
-    painting.construct("painting", "painting.ogg", "paintingDesc.ogg", 0)
-    deskKey.construct("deskKey", "deskKey.ogg", "deskKeyDesc.ogg", 1)
-    studyRecording.construct("studyRecording", "recording.ogg", "studyRecordingDesc.ogg", 0)
-    computer.construct("computer", "computer.ogg", "computerDesc.ogg", 0)
-    phone.construct("phone", "phone.ogg", "phoneDesc.ogg", 0)
-    safe.construct("safe", "safe.ogg", "safeDesc.ogg", 0)
-    desk.construct("desk", "desk.ogg", "deskDesc.ogg", 0)
-    bedroomRecording.construct("bedroomRecording", "recording.ogg", "bedroomRecordingDesc.ogg", 0)
-    bed.construct("bed", "bed.ogg", "bedDesc.ogg", 0)
-    mirror.construct("mirror", "mirror.ogg", "mirrorDesc.ogg", 0)
-    bathtub.construct("bathtub", "bathtub.ogg", "bathtubDesc.ogg", 0)
-    shelf.construct("shelf", "shelf.ogg", "shelfDesc.ogg", 0)
-    box.construct("box", "box.ogg", "boxDesc.ogg", 0)
-    broom.construct("broom", "broom.ogg", "broomDesc.ogg", 1)
-    hammer.construct("hammer", "hammer.ogg", "hammerDesc.ogg", 1)
-    star.construct("star", "star.ogg", "starDesc.ogg", 1)
-    starHole.construct("starHole", "starHole.ogg", "starHoleDesc.ogg", 0)
-    bathroomHallwayDoor.construct("bathroomHallwayDoor", "bathroomHallwayDoor.ogg", "bathroomHallwayDoorDesc.ogg", 0)
-    safeRecording.construct("safeRecording", "safeRecording.ogg", "safeRecordingDesc.ogg", 0)
-    cellKey.construct("cellKey", "cellKey.ogg", "cellKeyDesc.ogg", 1)
-    passCard.construct("passCard", "passCard.ogg", "passCardDesc.ogg", 1)
-    upperHallwayDoor.construct("upperHallwayDoor", "upperHallwayDoor.ogg", "upperHallwayDoorDesc.ogg", 0)
-    notebook.construct("notebook", "notebook.ogg", "notebookDesc.ogg", 0)
-    mainEntrance.construct("mainEntrance", "mainEntrance.ogg", "mainEntranceDesc.ogg", 0)
-    masterBedroomDeskKey.construct("masterBedroomDeskKey", "masterBedroomDeskKey.ogg", "masterBedroomDeskKeyDesc.ogg", 1)
-    masterBedroomBed.construct("masterBedroomBed", "bed.ogg", "masterBedroomBedDesc.ogg", 0)
-
-    masterBedroomDesk.construct("masterBedroomDesk", "desk.ogg", "masterBedroomDeskDesc.ogg", 0)
-    libraryRecording.construct("libraryRecording", "recording.ogg", "libraryRecordingDesc.ogg", 0)
-    masterBedroomRecording.construct("masterBedroomRecording", "recording.ogg", "masterBedroomRecordingDesc.ogg", 0)
-    masterBathroomStarHole.construct("masterBathroomStarHole", "starHole.ogg", "starHoleDesc.ogg", 0)    
-    masterBathroomMirror.construct("masterBathroomMirror", "mirror.ogg", "mirrorDesc.ogg", 0)
-    knife.construct("knife", "knife.ogg", "knifeDesc.ogg", 1)
-    trappedHallwayDoorKey.construct("trappedHallwayDoorKey", "trappedHallwayDoorKey.ogg", "trappedHallwayDoorKeyDesc.ogg", 1)
-    sittingRoomDoor.construct("sittingRoomDoor", "sittingRoomDoor.ogg", "sittingRoomDoorDesc.ogg", 0)
-    eleanor.construct("eleanor", "eleanor.ogg", "eleanorDesc.ogg", 0)
-    gun.construct("gun", "gun.ogg", "gunDesc.ogg", 1)
-    labDoor.construct("labDoor", "labDoor.ogg", "labDoorDesc.ogg", 0)
-    ingredients.construct("ingredients", "ingredients.ogg", "ingredientsDesc.ogg", 1)
-    mazeDoor.construct("mazeDoor", "mazeDoor.ogg", "mazeDoorDesc.ogg", 0)
-    garageDoor.construct("garageDoor", "garageDoor.ogg", "garageDoorDesc.ogg", 0)
-    garageKey.construct("garageKey", "garageKey.ogg", "garageKeyDesc.ogg", 1)
-    gasoline.construct("gasoline", "gasoline.ogg", "gasolineDesc.ogg", 1)
-    trappedHallwayDoor.construct("trappedHallwayDoor", "trappedHallwayDoor.ogg", "trappedHallwayDoorDesc.ogg", 0)
-    barnDoor.construct("barnDoor", "barnDoor.ogg", "barnDoorDesc.ogg", 0)
-    barnSwitch.construct("barnSwitch", "barnSwitch.ogg", "barnSwitchDesc.ogg", 0)
-    eleanor2.construct("eleanor2", "eleanor.ogg", "eleanorDesc4.ogg", 0)
     inventory.construct("inventory", "inventory.ogg", "inventory.ogg", [], [player])
 
 #************** MAIN METHOD *****************************************************************************
@@ -1135,8 +1105,61 @@ if __name__ == "__main__":
         barnDoor = Item()
         barnSwitch = Item()
         eleanor2 = Item()
-    
-          
+
+        operatingTable.construct("operatingTable", "operatingTable.ogg", "operatingTableDesc.ogg", 0)
+        scalpel.construct("scalpel", "scalpel.ogg", "scalpelDesc.ogg", 1)
+        operatingRoomRecording.construct("operatingRoomRecording", "recording.ogg", "operatingRoomRecordingDesc.ogg", 0)
+        operatingRoomDoor.construct("operatingRoomDoor", "operatingRoomDoor.ogg", "operatingRoomDoorDesc.ogg", 0)
+        operatingRoomKey.construct("operatingRoomKey", "operatingRoomKey.ogg", "operatingRoomKeyDesc.ogg", 1)
+        freezerBodies.construct("freezerBodies", "freezerBodies.ogg", "freezerBodiesDesc.ogg", 0)
+        piano.construct("piano", "piano.ogg", "pianoDesc.ogg", 0)
+        painting.construct("painting", "painting.ogg", "paintingDesc.ogg", 0)
+        deskKey.construct("deskKey", "deskKey.ogg", "deskKeyDesc.ogg", 1)
+        studyRecording.construct("studyRecording", "recording.ogg", "studyRecordingDesc.ogg", 0)
+        computer.construct("computer", "computer.ogg", "computerDesc.ogg", 0)
+        phone.construct("phone", "phone.ogg", "phoneDesc.ogg", 0)
+        safe.construct("safe", "safe.ogg", "safeDesc.ogg", 0)
+        desk.construct("desk", "desk.ogg", "deskDesc.ogg", 0)
+        bedroomRecording.construct("bedroomRecording", "recording.ogg", "bedroomRecordingDesc.ogg", 0)
+        bed.construct("bed", "bed.ogg", "bedDesc.ogg", 0)
+        mirror.construct("mirror", "mirror.ogg", "mirrorDesc.ogg", 0)
+        bathtub.construct("bathtub", "bathtub.ogg", "bathtubDesc.ogg", 0)
+        shelf.construct("shelf", "shelf.ogg", "shelfDesc.ogg", 0)
+        box.construct("box", "box.ogg", "boxDesc.ogg", 0)
+        broom.construct("broom", "broom.ogg", "broomDesc.ogg", 1)
+        hammer.construct("hammer", "hammer.ogg", "hammerDesc.ogg", 1)
+        star.construct("star", "star.ogg", "starDesc.ogg", 1)
+        starHole.construct("starHole", "starHole.ogg", "starHoleDesc.ogg", 0)
+        bathroomHallwayDoor.construct("bathroomHallwayDoor", "bathroomHallwayDoor.ogg", "bathroomHallwayDoorDesc.ogg", 0)
+        safeRecording.construct("safeRecording", "safeRecording.ogg", "safeRecordingDesc.ogg", 0)
+        cellKey.construct("cellKey", "cellKey.ogg", "cellKeyDesc.ogg", 1)
+        passCard.construct("passCard", "passCard.ogg", "passCardDesc.ogg", 1)
+        upperHallwayDoor.construct("upperHallwayDoor", "upperHallwayDoor.ogg", "upperHallwayDoorDesc.ogg", 0)
+        notebook.construct("notebook", "notebook.ogg", "notebookDesc.ogg", 0)
+        mainEntrance.construct("mainEntrance", "mainEntrance.ogg", "mainEntranceDesc.ogg", 0)
+        masterBedroomDeskKey.construct("masterBedroomDeskKey", "masterBedroomDeskKey.ogg", "masterBedroomDeskKeyDesc.ogg", 1)
+        masterBedroomBed.construct("masterBedroomBed", "bed.ogg", "masterBedroomBedDesc.ogg", 0)
+
+        masterBedroomDesk.construct("masterBedroomDesk", "desk.ogg", "masterBedroomDeskDesc.ogg", 0)
+        libraryRecording.construct("libraryRecording", "recording.ogg", "libraryRecordingDesc.ogg", 0)
+        masterBedroomRecording.construct("masterBedroomRecording", "recording.ogg", "masterBedroomRecordingDesc.ogg", 0)
+        masterBathroomStarHole.construct("masterBathroomStarHole", "starHole.ogg", "starHoleDesc.ogg", 0)    
+        masterBathroomMirror.construct("masterBathroomMirror", "mirror.ogg", "mirrorDesc.ogg", 0)
+        knife.construct("knife", "knife.ogg", "knifeDesc.ogg", 1)
+        trappedHallwayDoorKey.construct("trappedHallwayDoorKey", "trappedHallwayDoorKey.ogg", "trappedHallwayDoorKeyDesc.ogg", 1)
+        sittingRoomDoor.construct("sittingRoomDoor", "sittingRoomDoor.ogg", "sittingRoomDoorDesc.ogg", 0)
+        eleanor.construct("eleanor", "eleanor.ogg", "eleanorDesc.ogg", 0)
+        gun.construct("gun", "gun.ogg", "gunDesc.ogg", 1)
+        labDoor.construct("labDoor", "labDoor.ogg", "labDoorDesc.ogg", 0)
+        ingredients.construct("ingredients", "ingredients.ogg", "ingredientsDesc.ogg", 1)
+        mazeDoor.construct("mazeDoor", "mazeDoor.ogg", "mazeDoorDesc.ogg", 0)
+        garageDoor.construct("garageDoor", "garageDoor.ogg", "garageDoorDesc.ogg", 0)
+        garageKey.construct("garageKey", "garageKey.ogg", "garageKeyDesc.ogg", 1)
+        gasoline.construct("gasoline", "gasoline.ogg", "gasolineDesc.ogg", 1)
+        trappedHallwayDoor.construct("trappedHallwayDoor", "trappedHallwayDoor.ogg", "trappedHallwayDoorDesc.ogg", 0)
+        barnDoor.construct("barnDoor", "barnDoor.ogg", "barnDoorDesc.ogg", 0)
+        barnSwitch.construct("barnSwitch", "barnSwitch.ogg", "barnSwitchDesc.ogg", 0)
+        eleanor2.construct("eleanor2", "eleanor.ogg", "eleanorDesc4.ogg", 0)
 
        
        
