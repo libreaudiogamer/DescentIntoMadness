@@ -380,21 +380,6 @@ def playSound(r,delay=False):
             if (event.type == KEYUP): # or (event.type == KEYDOWN)
                 chan.stop()
                 return event.key
-#def playSoundLoop(sound):
-#    "Plays a sound"
-#    file = "sounds/" + sound
-    #create source
-    #src = pySonic.Source()
-#    #load audio from disk
-#    src.Sound = pySonic.FileSample(file, pySonic.Constants.FSOUND_LOOP_NORMAL)
-#    src.Play()
-#    while src.IsPlaying():
-#      for event in pygame.event.get():
-#        if (event.type == KEYUP): # or (event.type == KEYDOWN)
-#          return event.key
-#        if (event.type == QUIT):
-#          pygame.quit()
-#          sys.exit()      
 
 #************** GAME LOOP *******************************************************************************
 def gameLoop():
