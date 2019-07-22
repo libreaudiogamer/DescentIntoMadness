@@ -29,7 +29,7 @@ elevator = None
 study= None
 upperHallway = None
 bedroom = None
-bathroo= None
+bathroom= None
 closet = None
 bathroomHallway= None
 balcony = None
@@ -49,7 +49,7 @@ trappedHallway = None
 outside = None
 barn = None
 barnLoft= None
-
+inventory= None
 #******** PYGAME INITIALIZATION ********************************************************************
 import pygame
 from pygame.locals import *
@@ -257,7 +257,7 @@ def loadGame():
     pygame.mixer.music.load("sounds/music1.ogg")
     pygame.mixer.music.set_volume(.15)
     pygame.mixer.music.play(-1)
-    global operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict
+    global inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict
     #retrieve currentRoom and roomDict
     #print "Please select a save slot to load"
     playSound("selectLoad.ogg")
@@ -265,7 +265,7 @@ def loadGame():
         slot = selectOption(saveList)
 #        print slot
         fileHandle = open ( slot,'rb')
-        [operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict] = pickle.load ( fileHandle )
+        [inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict] = pickle.load ( fileHandle )
         fileHandle.close()
     except IOError:
         #print "That file is empty or doesn't exist. You will now be returned to the main menu"
@@ -283,7 +283,7 @@ def save():
     try:
         slot = selectOption(saveList)
         fileHandle = open ( slot, 'wb' )
-        pickle.dump ( [operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict], fileHandle ) #hopefully this works
+        pickle.dump ( [inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict], fileHandle ) #hopefully this works
         fileHandle.close()
         #print "Your game was successfully saved"
         playSound("saveSuccessful.ogg")
@@ -717,6 +717,7 @@ def knifeToEleanor():
     roomDict["basementHallway"]["rooms"].insert(0, lab)
     roomDict["basementHallway"]["items"].remove(labDoor)
     roomDict["lab"]["items"].insert(0, eleanor)
+    roomDict["study"]["rooms"].remove(elevator)
 
 def passCardToMazeDoor():
 #    "Starts the maze. Follow the sound to get to the exit"
