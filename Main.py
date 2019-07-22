@@ -717,7 +717,6 @@ def knifeToEleanor():
     roomDict["basementHallway"]["rooms"].insert(0, lab)
     roomDict["basementHallway"]["items"].remove(labDoor)
     roomDict["lab"]["items"].insert(0, eleanor)
-    roomDict["study"]["rooms"].remove(elevator)
 
 def passCardToMazeDoor():
 #    "Starts the maze. Follow the sound to get to the exit"
