@@ -381,7 +381,7 @@ def getInput():
     while 1==1:
         pygame.time.delay(100)
         for event in pygame.event.get():
-            if (event.type == KEYUP): # or (event.type == KEYDOWN)
+            if (event.type == KEYDOWN):
                 return event.key
             if (event.type == QUIT):
                 pygame.quit()
@@ -401,7 +401,7 @@ def playSound(r,delay=False):
         if delay == True:
             continue
         for event in pygame.event.get():
-            if (event.type == KEYUP): # or (event.type == KEYDOWN)
+            if (event.type == KEYDOWN):
                 chan.stop()
                 return event.key
 
