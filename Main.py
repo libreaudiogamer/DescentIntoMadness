@@ -879,7 +879,7 @@ def trappedHallwayReact(direction):
         expectedInput = K_SPACE
     else:
          print("Error in trappedHallwayReact()")
-    t = Timer(2.0, dieInTrappedHallway)
+    t = Timer(1.0, dieInTrappedHallway)
     playSound(soundFile)
     t.start() # after 2 seconds, player dies if he hasn't inputted correct key
     while 1:
@@ -887,10 +887,12 @@ def trappedHallwayReact(direction):
         if keyboardInput == expectedInput:
             t.cancel()
             return 0
-        else:
-            #print "You act as fast you can, but you did the wrong thing and a blade cuts you in half"
+        if t.is_alive() == True:
             t.cancel()
-            playSound("dieInTrappedHallway2.ogg")
+            #print "You act as fast you can, but you did the wrong thing and a blade cuts you in half"
+            playSound("dieInTrappedHallway2.ogg")        
+            gameOver()
+
             gameOver()
   
 def trappedHallwayDoorKeyToTrappedHallwayDoor():
@@ -957,7 +959,7 @@ def gasolineToEleanor2():
     playSound("doc140_barn.ogg")
     playSound("friend080_shoot_the_doctor.ogg")
     
-    t = Timer(2.0, dieInBarn) 
+    t = Timer(1.0, dieInBarn) 
     t.start() # after 2 seconds, player dies if he hasn't inputted correct key 
     while 1:
         keyboardInput = getInput()
