@@ -947,8 +947,10 @@ def dieInBarn():
     #print "You try to pull out your gun, but you aren't fast enough. The doctor bounds up the stairs with surprising speed, steals your gun right out of your hand and shoots you with it"
     playSound("dieInBarn.ogg")
     gameOver()
-    
+def gasolineToEleanor():
+    playSound("eleanorDesc3.ogg")
 def gasolineToEleanor2():
+
     "Give her the gas"
     #print "conversation"
     playSound("doc140_barn.ogg")
@@ -1173,7 +1175,7 @@ if __name__ == "__main__":
                     "garageKey":[["garageDoor", garageKeyToGarageDoor]],
                     "gun":[["garageDoor", gunToGarageDoor]],
                     "trappedHallwayDoorKey":[["trappedHallwayDoor", trappedHallwayDoorKeyToTrappedHallwayDoor]],
-                    "gasoline":[["eleanor2", gasolineToEleanor2]]}
+                    "gasoline":[["eleanor2", gasolineToEleanor2], ["eleanor", gasolineToEleanor]]}
         roomDict = {"inventory":inventory,
                     "operatingRoom":operatingRoom,
                     "freezer":freezer,
