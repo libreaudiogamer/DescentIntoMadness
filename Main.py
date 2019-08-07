@@ -969,6 +969,7 @@ def gasolineToEleanor2():
     #print "ending"
     playSound("narrator_before_final_scene.ogg")
     playSound("final_scene.ogg")
+    menu()
 def constructRoomsItems():
     #construct the rooms and items
     operatingRoom.construct("operatingRoom", "operatingRoom.ogg", "operatingRoomDesc.ogg", [], [operatingTable, scalpel])   #freezer, operatingRoomDoor accessible after scalpelToOperatingTable, locked door to basementHallway
