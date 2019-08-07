@@ -93,12 +93,6 @@ class Item(UserDict):
         #takable: 0 = not takable, 1 = takable
         self["takable"]=canYouTakeIt
 
-class DeadException(Exception):
-    "Thrown when player dies"
-    def __init__(self):
-        pass
-
-
 #*************** ACTIONS **************************************************************************
 def useItem():
     "When an item is used"
@@ -373,7 +367,7 @@ def gameOver():
     "Game Over"
     #print "Game Over"
     playSound("gameOver.ogg")
-    raise DeadException
+    menu()
     #menu()  #may have other functions on the stack, don't know what to do about that
 
 def getInput():
@@ -418,17 +412,15 @@ def gameLoop():
             break
         playSound(roomDict[currentRoom]["sDescription"])
 
-    try:    
-        while 1 == 1:
-            #print "Choose an option"
-            playSound("chooseAnOption.ogg")
-            action = selectOption(actionList)              
-            if action == "esc": #esc was pressed
-                pass #to prevent accidental quits
-            else:
-                action()
-    except DeadException:
-        return 0
+
+    while 1 == 1:
+        #print "Choose an option"
+        playSound("chooseAnOption.ogg")
+        action = selectOption(actionList)              
+        if action == "esc": #esc was pressed
+            pass #to prevent accidental quits
+        else:
+            action()
 
     
 #************** useItem FUNCTIONS ***********************************************************************
