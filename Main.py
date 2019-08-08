@@ -16,7 +16,7 @@ from collections import UserDict
 import pickle         #for loading and saving data
 import sys            #for sys.exit()
 from threading import Timer
-
+timerExpired = False # used for all things with time in the game
 
 #global currentRoom, roomDict
 currentRoom = None
@@ -380,7 +380,22 @@ def getInput():
             if (event.type == QUIT):
                 pygame.quit()
                 sys.exit()
-                
+
+def getInputTimer():
+    "Waits for keyboard input and returns key that is pressed. If the timer expires, function exits"
+    while timerExpired == False:
+        pygame.time.delay(100)
+        for event in pygame.event.get():
+            if (event.type == KEYDOWN):
+                return event.key
+            if (event.type == QUIT):
+                pygame.quit()
+                sys.exit()
+
+
+def expireTimer():
+    global timerExpired
+    timerExpired = True
 def playSound(r,delay=False):
     try:
         chan=pygame.mixer.find_channel()
@@ -855,12 +870,8 @@ def gunToGarageDoor():
     roomDict["kitchen"]["items"].remove(garageDoor)
     roomDict["kitchen"]["rooms"].insert(0, garage)
     
-def dieInTrappedHallway():
-    "For use in trappedHallwayDoorKeyToTrappedHallwayDoor()"
-    #print "You fail to act fast enough, and a large blade cuts in you half"
-    playSound("dieInTrappedHallway.ogg")
-    gameOver()
-    
+
+
 def trappedHallwayReact(direction):
     if direction == "up":
         soundFile = "jump.ogg"
@@ -879,22 +890,23 @@ def trappedHallwayReact(direction):
         expectedInput = K_SPACE
     else:
          print("Error in trappedHallwayReact()")
-    t = Timer(1.0, dieInTrappedHallway)
+    t = Timer(1.0, expireTimer)
     playSound(soundFile)
     t.start() # after 2 seconds, player dies if he hasn't inputted correct key
     while 1:
-        keyboardInput = getInput()
+        keyboardInput = getInputTimer()
         if keyboardInput == expectedInput:
             t.cancel()
             return 0
-        if t.is_alive() == True:
+        if keyboardInput != expectedInput and t.is_alive() == True:
             t.cancel()
             #print "You act as fast you can, but you did the wrong thing and a blade cuts you in half"
             playSound("dieInTrappedHallway2.ogg")        
             gameOver()
-
+        if t.is_alive() == False:
+            playSound("dieInTrappedHallway.ogg")
             gameOver()
-  
+
 def trappedHallwayDoorKeyToTrappedHallwayDoor():
     "Use key on door, triggers cut scene"
     roomDict["inventory"]["items"].remove(trappedHallwayDoorKey)
