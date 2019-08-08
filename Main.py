@@ -16,7 +16,7 @@ from collections import UserDict
 import pickle         #for loading and saving data
 import sys            #for sys.exit()
 from threading import Timer
-timerExpired = False # used for all things with time in the game
+
 
 #global currentRoom, roomDict
 currentRoom = None
@@ -50,6 +50,9 @@ outside = None
 barn = None
 barnLoft= None
 inventory= None
+timerExpired = None # used for all things with time in the game
+eleanor2Untied=None
+friendOutOfCell=None
 #******** PYGAME INITIALIZATION ********************************************************************
 import pygame
 from pygame.locals import *
@@ -251,7 +254,7 @@ def loadGame():
     pygame.mixer.music.load("sounds/music1.ogg")
     pygame.mixer.music.set_volume(.15)
     pygame.mixer.music.play(-1)
-    global inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict
+    global inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict, friendOutOfCell, eleanor2Untied
     #retrieve currentRoom and roomDict
     #print "Please select a save slot to load"
     playSound("selectLoad.ogg")
@@ -259,7 +262,7 @@ def loadGame():
         slot = selectOption(saveList)
 #        print slot
         fileHandle = open ( slot,'rb')
-        [inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict] = pickle.load ( fileHandle )
+        [inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict, friendOutOfCell, eleanor2Untied] = pickle.load ( fileHandle )
         fileHandle.close()
     except IOError:
         #print "That file is empty or doesn't exist. You will now be returned to the main menu"
@@ -277,7 +280,7 @@ def save():
     try:
         slot = selectOption(saveList)
         fileHandle = open ( slot, 'wb' )
-        pickle.dump ( [inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict], fileHandle ) #hopefully this works
+        pickle.dump ( [inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict, friendOutOfCell, eleanor2Untied], fileHandle ) #hopefully this works
         fileHandle.close()
         #print "Your game was successfully saved"
         playSound("saveSuccessful.ogg")
@@ -873,6 +876,8 @@ def gunToGarageDoor():
 
 
 def trappedHallwayReact(direction):
+    global timerExpired
+    timerExpired= False
     if direction == "up":
         soundFile = "jump.ogg"
         expectedInput = K_UP
@@ -952,11 +957,12 @@ def playerToBarnSwitch():
     gameOver()
     
 def knifeToEleanor2():
+    global eleanor2Untied
     "Cut her bindings"
     #print "conversation"
     playSound("knifeToEleanor2.ogg")
     playSound("eleanor050_barn.ogg")
-    
+    eleanor2Untied=True
 def dieInBarn():
     "Killed by doctor"
     #print "You try to pull out your gun, but you aren't fast enough. The doctor bounds up the stairs with surprising speed, steals your gun right out of your hand and shoots you with it"
@@ -965,8 +971,10 @@ def dieInBarn():
 def gasolineToEleanor():
     playSound("eleanorDesc3.ogg")
 def gasolineToEleanor2():
-
-    "Give her the gas"
+    "Give her the gas if she is untied"
+    if eleanor2Untied==False:
+        playSound("gasolineToTiedEleanor.ogg")
+        return
     #print "conversation"
     playSound("doc140_barn.ogg")
     playSound("friend080_shoot_the_doctor.ogg")
@@ -1019,7 +1027,9 @@ def constructRoomsItems():
     barnLoft.construct("barnLoft", "barnLoft.ogg", "barnLoftDesc.ogg", [barn], [eleanor2])
    
     inventory.construct("inventory", "inventory.ogg", "inventory.ogg", [], [player])
-
+    global eleanor2Untied, friendOutOfCell
+    eleanor2Untied=False
+    friendOutOfCell=False
 #************** MAIN METHOD *****************************************************************************
 if __name__ == "__main__":
     try:
@@ -1222,7 +1232,7 @@ if __name__ == "__main__":
                     "barnLoft":barnLoft}
         actionList = [["move.ogg", move], ["useItem.ogg", useItem], ["examine.ogg", examine], ["quit.ogg", quit]]
         yesNoList = [["yes.ogg", "yes"], ["no.ogg", "no"]]
-        menuList = [["newGame.ogg", newGame], ["loadGame.ogg", loadGame], ["options.ogg", options], ["quit.ogg", quit]]
+        menuList = [["newGame.ogg", newGame], ["loadGame.ogg", loadGame], ["quit.ogg", quit]] #Options removed for now because the voice speeed doesn't do anything in my port.
         saveList = [["slot1.ogg", "save1.txt"], ["slot2.ogg", "save2.txt"], ["slot3.ogg", "save3.txt"], ["slot4.ogg", "save4.txt"], ["slot5.ogg", "save5.txt"]]
     
         SPEED_NORMAL = 45000
