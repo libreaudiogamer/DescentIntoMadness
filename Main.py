@@ -248,7 +248,7 @@ def newGame():
     playSound("intro.ogg")
     #playSound("instructions.ogg")
     gameLoop()
-    
+
 def loadGame():
     "Load Game"
     pygame.mixer.music.load("sounds/music1.ogg")
@@ -260,6 +260,9 @@ def loadGame():
     playSound("selectLoad.ogg")
     try:
         slot = selectOption(saveList)
+        if slot == "esc":
+            playSound("cancel.ogg")
+            return
 #        print slot
         fileHandle = open ( slot,'rb')
         [inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict, friendOutOfCell, eleanor2Untied] = pickle.load ( fileHandle )
@@ -279,6 +282,9 @@ def save():
     playSound("saveSlot.ogg")
     try:
         slot = selectOption(saveList)
+        if slot == "esc":
+            playSound("cancel.ogg")
+            return
         fileHandle = open ( slot, 'wb' )
         pickle.dump ( [inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict, friendOutOfCell, eleanor2Untied], fileHandle ) #hopefully this works
         fileHandle.close()
