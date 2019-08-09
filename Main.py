@@ -870,7 +870,8 @@ def garageKeyToGarageDoor():
     "Doesn't work"
     #print "You try the key to the door, but the lock seems to be rusted shut. Maybe you can just shoot it out"
     playSound("garageKeyToGarageDoor.ogg")
-    
+    roomDict["inventory"]["items"].remove(garageKey)
+
 def gunToGarageDoor():
     "Shoot open lock"
 
@@ -879,7 +880,6 @@ def gunToGarageDoor():
         gameOver()
     #print "You shoot the lock on the door and it shatters. You can now move to the garage"
     playSound("gunToGarageDoor.ogg")
-    roomDict["inventory"]["items"].remove(garageKey)
     roomDict["kitchen"]["items"].remove(garageDoor)
     roomDict["kitchen"]["rooms"].insert(0, garage)
     
