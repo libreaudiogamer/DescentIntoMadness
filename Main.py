@@ -975,6 +975,9 @@ def knifeToEleanor2():
     playSound("knifeToEleanor2.ogg")
     playSound("eleanor050_barn.ogg")
     eleanor2Untied=True
+    roomDict["barnLoft"]["items"].remove(eleanor2)
+    eleanor2["sDescription"]="eleanorDesc5.ogg"
+    roomDict["barnLoft"]["items"].append(eleanor2)
 def dieInBarn():
     "Killed by doctor"
     #print "You try to pull out your gun, but you aren't fast enough. The doctor bounds up the stairs with surprising speed, steals your gun right out of your hand and shoots you with it"
