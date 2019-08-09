@@ -993,17 +993,19 @@ def gasolineToEleanor2():
     #print "conversation"
     playSound("doc140_barn.ogg")
     playSound("friend080_shoot_the_doctor.ogg")
-    
-    t = Timer(1.0, dieInBarn) 
+    global timerExpired
+    timerExpired = False
+    t = Timer(1.0, expireTimer) 
     t.start() # after 2 seconds, player dies if he hasn't inputted correct key 
     while 1:
-        keyboardInput = getInput()
+        keyboardInput = getInputTimer()
         if keyboardInput == K_SPACE:
             t.cancel()
             break
-        else:
-            pass
-
+        if timerExpired == False and keyboardInput != K_SPACE:
+            continue
+        if timerExpired == True:
+            gameOver()
     playSound("doc150_barn_hit.ogg")
     
     #print "ending"
