@@ -10,8 +10,8 @@ Descent Into Madness
 Status
 ======
 
-In use worldwide since 2005, reported to have a few bugs.
-
+In use worldwide since 2005, reported to have a few bugs which hopefully are now fixed.
+To build the windows version, run "pyinstaller --oneversion --noconsole Main.py"
 License
 =======
 
