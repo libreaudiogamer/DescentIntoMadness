@@ -832,6 +832,7 @@ def passCardToMazeDoor():
 #            #print "You've reached the end of the maze. After rummaging through stacks of chemicals, you find the ingredients that Eleanor told you about. You make your way back to the entrance of the maze, and are now back in the basement"
             playSound("passCardToMazeDoor7.ogg")
             roomDict["inventory"]["items"].append(ingredients)
+            roomDict["basement"]["items"].remove(mazeDoor)
             return 0
 
 def playerToComputer():
