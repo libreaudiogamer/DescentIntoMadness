@@ -602,6 +602,8 @@ def cellKeyToBathroomHallwayDoor():
     roomDict["bathroomHallway"]["items"].remove(bathroomHallwayDoor)
     roomDict["inventory"]["items"].remove(cellKey)
     #print "Let's go to the main hallway and open the strange locked door"
+    global friendOutOfCell
+    friendOutOfCell=True
     playSound("cellKeyToBathroomHallwayDoor.ogg")
     global currentRoom
     currentRoom = upperHallway["name"]
@@ -612,6 +614,9 @@ def cellKeyToBathroomHallwayDoor():
 
 def hammerToUpperHallwayDoor():
     "You need to hit the door and it opens. You can now move to the balcony"
+    if friendOutOfCell==False:
+        playSound("hammerToUpperHallwayDoorEarly.ogg")
+        return
     #print "You hit the door and it opens"
     playSound("hammerToUpperHallwayDoor.ogg")
     playSound("hammerToUpperHallwayDoor2.ogg")
