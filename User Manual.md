@@ -12,9 +12,7 @@ If we have done our job correctly, Descent into Madness will play out like an el
 
 ### Requirements
 
-This fork of the original has not set firm system requirements yet. The goal is to make the game playable by as many people as possible. In achieving that goal, I will convert it to use modern technologies (python3). While in development, it will probably work best on linux since that is where it is being developed. The windows script is being moved to a "inoperable" folder for the moment because my modernization will break it. After development is closer to being complete, support for other operating systems will be added and tested. If you have an interest and can help port the game to your favorite operating system, drop me a line.
-Stereo headphones are required for some of the puzzles.
-
+The maintainer of this updated fork of the original tests and programs this game on Linux so it is the most extensively tested platform. A Windows build is also provided and a build for apple computers is coming soon.
 
 ## Administration
 
@@ -24,7 +22,7 @@ Descent Into Madness is available for free at this website: http://www.cs.unc.ed
 
 ### Installation
 
-Run Setup.exe to install the program. By default, it will install under “C:\Program Files\Descent Into Madness v1.” You may run it from the Start menu.
+If on Windows, unzip the downloaded directory and run "descent.exe" from the folder to play. If on Linux, make sure you have python3 and pygame installed on your machine and run "python3 Main.py".
 
 ## Playing Descent into Madness
 
@@ -47,8 +45,7 @@ When the game is started, a menu screen appears after a short music prelude. The
 
     1. New Game
     2. Load Game
-    3. Options
-    4. Quit
+        3. Quit
 
 Use the arrow keys to move between the choices, and hit SPACE Bar to select an option.
 
@@ -60,11 +57,7 @@ Use the arrow keys to move between the choices, and hit SPACE Bar to select an o
 
 	You can save your progress during the game, and you can resume your game by choosing this option at the main menu. After you select this option, you are asked to “Choose a Slot”. Choose the slot number that you saved your game to begin where you left off last time.
 
-3. Options
-
-	You may change the speed at which the voices in the game are spoken. The only two choices are Fast or Normal.
-
-4. Quit
+3. Quit
 	
 	Selecting this exits the game.
 
