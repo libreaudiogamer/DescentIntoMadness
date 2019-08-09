@@ -4,6 +4,7 @@ Descent Into Madness
 
 :Author: Matt Clark
 :Author: Eden Kung
+:Porter: libreaudiogamer
 :Description: A horror-themed adventure game made accessible for visually-impaired people.
 
 Status
@@ -15,6 +16,7 @@ License
 =======
 
 Copyright (c) 2005, Matt Clark, Eden Kung
+Copyright (c) 2019, libreaudiogamer
 All rights reserved.
 
 http://creativecommons.org/licenses/BSD/
