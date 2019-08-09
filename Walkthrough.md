@@ -118,7 +118,7 @@ Once you have examined all the objects and listened to the recording, Move out o
 
 ### 23. Maze
 
-
+Find your way through the maze by selecting north, East, South, or West. Engredients are near the upper left corner.
 After you have obtained the Ingredients, you need to give them to Eleanor. She is located in the Lab, which if you remember was a locked room off of the Basement Hallway. To get there, first make your way all the way back to the Study.
 
 ### 24. Study (part three)
