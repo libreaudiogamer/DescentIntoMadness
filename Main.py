@@ -929,6 +929,9 @@ def trappedHallwayReact(direction):
 
 def trappedHallwayDoorKeyToTrappedHallwayDoor():
     "Use key on door, triggers cut scene"
+    if (mazeDoor in roomDict["basement"]["items"]) or (ingredients in roomDict["inventory"]["items"]):
+        playSound("shotByDoctor.ogg")
+        gameOver()
     roomDict["inventory"]["items"].remove(trappedHallwayDoorKey)
     #print "Conversation"
     playSound("trappedHallwayDoorKeyToDoor0.ogg")
