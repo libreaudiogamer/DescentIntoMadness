@@ -933,6 +933,8 @@ def trappedHallwayDoorKeyToTrappedHallwayDoor():
         playSound("shotByDoctor.ogg")
         gameOver()
     roomDict["inventory"]["items"].remove(trappedHallwayDoorKey)
+    roomDict["lab"]["items"].remove(eleanor)
+    roomDict["lobby"]["rooms"].insert(0, trappedHallway)
     #print "Conversation"
     playSound("trappedHallwayDoorKeyToDoor0.ogg")
     playSound("trappedHallwayDoorKeyToDoor1.ogg")
