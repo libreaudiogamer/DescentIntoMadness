@@ -760,7 +760,7 @@ def passCardToMazeDoor():
     mazeMatrix[2][0]=1
     mazeMatrix[3][0]=1
     mazeMatrix[3][1]=1
-    mazeMatrix[3][2]=1
+    mazeMatrix[3][2]=2
     mazeMatrix[2][2]=1
     mazeMatrix[1][2]=1
     mazeMatrix[1][3]=1
