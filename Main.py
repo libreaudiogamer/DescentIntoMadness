@@ -253,9 +253,6 @@ def newGame():
 
 def loadGame():
     "Load Game"
-    pygame.mixer.music.load("sounds/music1.ogg")
-    pygame.mixer.music.set_volume(.15)
-    pygame.mixer.music.play(-1)
     global inventory, operatingRoom, freezer, basementHallway, pianoRoom, elevator, study, upperHallway, bedroom, bathroom, closet, bathroomHallway, balcony, westHallway, lobby, library, masterBedroom,  masterBathroom, masterElevator, eleanorsRoom, sittingRoom, basement, kitchen, lab, garage, trappedHallway, outside, barn, barnLoft, currentRoom, roomDict, friendOutOfCell, eleanor2Untied, eleanor, eleanor2
     #retrieve currentRoom and roomDict
     #print "Please select a save slot to load"
@@ -273,9 +270,11 @@ def loadGame():
         #print "That file is empty or doesn't exist. You will now be returned to the main menu"
         playSound("loadError.ogg")
         return 0
-  
+    else:
+        pygame.mixer.music.load("sounds/music1.ogg")
+        pygame.mixer.music.set_volume(.15)
+        pygame.mixer.music.play(-1)
     gameLoop()
-
 def save():
     "Save"
     global currentRoom, roomDict
