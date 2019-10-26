@@ -878,10 +878,6 @@ def garageKeyToGarageDoor():
 
 def gunToGarageDoor():
     "Shoot open lock"
-
-    if (ingredients in roomDict["inventory"]["items"]):
-        playSound("breakIngredients.ogg")
-        gameOver()
     #print "You shoot the lock on the door and it shatters. You can now move to the garage"
     playSound("gunToGarageDoor.ogg")
     roomDict["kitchen"]["items"].remove(garageDoor)
