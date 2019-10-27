@@ -218,15 +218,18 @@ def move():
     
 
 #************** MENU FUNCTIONS **************************************************************************
+def menuIntro():
+    #print "Welcome to the game, use the spacebar to select, the esc key to cancel, and any other key to scroll"
+    pygame.mixer.music.load("sounds/menumusic.ogg")
+    pygame.mixer.music.set_volume(.80)
+    pygame.mixer.music.play(-1)
+    playSound("descentIntoMadness.ogg")
+    playSound("menuInstructions.ogg")
+    menu()
 def menu():
     "Menu"
     while 1 == 1:        
-        #print "Welcome to the game, use the spacebar to select, the esc key to cancel, and any other key to scroll"
-        pygame.mixer.music.load("sounds/menumusic.ogg")
-        pygame.mixer.music.set_volume(.80)
-        pygame.mixer.music.play(-1)
-        playSound("descentIntoMadness.ogg")
-        playSound("menuInstructions.ogg")
+
         #print "Choose a menu option"
         playSound("menu.ogg")
         menuOption = selectOption(menuList)
@@ -377,7 +380,7 @@ def gameOver():
     "Game Over"
     #print "Game Over"
     playSound("gameOver.ogg")
-    menu()
+    menuIntro()
     #menu()  #may have other functions on the stack, don't know what to do about that
 
 def getInput():
@@ -1014,7 +1017,7 @@ def gasolineToEleanor2():
     #print "ending"
     playSound("narrator_before_final_scene.ogg")
     playSound("final_scene.ogg")
-    menu()
+    menuIntro()
 def constructRoomsItems():
     #construct the rooms and items
     operatingRoom.construct("operatingRoom", "operatingRoom.ogg", "operatingRoomDesc.ogg", [], [operatingTable, scalpel])   #freezer, operatingRoomDoor accessible after scalpelToOperatingTable, locked door to basementHallway
@@ -1258,6 +1261,6 @@ if __name__ == "__main__":
         SPEED_NORMAL = 45000
         SPEED_FAST = 65000
         voiceSpeed = SPEED_NORMAL
-        menu()    
+        menuIntro()    
     finally:        
         pygame.quit()
